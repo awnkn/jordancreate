@@ -302,6 +302,36 @@ model TicketOrder {
   @@index([eventId])
 }
 
+// ------------------------------------------------------------------- Vendors
+
+// Suppliers the studio buys from, and partners renting space in the building.
+model Vendor {
+  id               String    @id @default(cuid())
+  company          String
+  kind             String    @default("Supplier")
+  contactFirstName String?
+  contactLastName  String?
+  email            String?
+  phone            String?
+  website          String?
+  status           String    @default("Prospect")
+  // Suppliers: what they provide.
+  service          String?
+  // Space partners: which space they rent, for how much, and until when.
+  spaceName        String?
+  monthlyRent      Float?
+  leaseStart       DateTime?
+  leaseEnd         DateTime?
+  notes            String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  interactions Interaction[]
+
+  @@index([kind])
+  @@index([status])
+}
+
 // ---------------------------------------------------------------- Shared log
 
 model Interaction {
@@ -317,8 +347,11 @@ model Interaction {
   guest     Guest?   @relation(fields: [guestId], references: [id], onDelete: Cascade)
   sponsorId String?
   sponsor   Sponsor? @relation(fields: [sponsorId], references: [id], onDelete: Cascade)
+  vendorId  String?
+  vendor    Vendor?  @relation(fields: [vendorId], references: [id], onDelete: Cascade)
 
   @@index([speakerId])
   @@index([guestId])
   @@index([sponsorId])
+  @@index([vendorId])
 }

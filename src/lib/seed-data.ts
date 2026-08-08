@@ -27,6 +27,7 @@ export async function hasData(db: PrismaClient): Promise<boolean> {
 export async function seedAll(db: PrismaClient) {
   // Wipe in dependency order so the seed is re-runnable.
   await db.interaction.deleteMany();
+  await db.vendor.deleteMany();
   await db.accessGrant.deleteMany();
   await db.person.deleteMany();
   await db.sponsor.deleteMany();
@@ -513,6 +514,21 @@ export async function seedAll(db: PrismaClient) {
     ],
   });
 
+  // ----------------------------------------------------------------- Vendors
+  const vendorSeed = [
+    { company: "Brightline AV", kind: "Supplier", status: "Active", contactFirstName: "Lou", contactLastName: "Marchetti", email: "lou@brightline.av", service: "Stage AV, lighting and playback", notes: "Redlined summit contract still with their legal." },
+    { company: "Hudson Print Works", kind: "Supplier", status: "Active", contactFirstName: "Dana", contactLastName: "Okafor", email: "dana@hudsonprint.nyc", service: "Offset + large format print" },
+    { company: "Verde Catering", kind: "Supplier", status: "Prospect", contactFirstName: "Mateo", contactLastName: "Reyes", email: "mateo@verdecatering.com", service: "Event catering", notes: "Tasting booked before we commit for the summit." },
+    { company: "Beacon Insurance Brokers", kind: "Supplier", status: "Paused", contactFirstName: "Iris", contactLastName: "Chan", email: "iris@beaconbrokers.com", service: "Studio and event insurance", notes: "Comparing against two other quotes at renewal." },
+    { company: "Marta Kide Photography", kind: "Space Partner", status: "Active", contactFirstName: "Marta", contactLastName: "Kide", email: "marta@martakide.com", spaceName: "Studio B", monthlyRent: 2400, leaseStart: day(-200), leaseEnd: day(165) },
+    { company: "Low End Theory Podcast", kind: "Space Partner", status: "Active", contactFirstName: "Andre", contactLastName: "Sims", email: "andre@lowendtheory.fm", spaceName: "Sound booth", monthlyRent: 950, leaseStart: day(-90), leaseEnd: day(275) },
+    { company: "Held Ceramics", kind: "Space Partner", status: "Active", contactFirstName: "Jonas", contactLastName: "Held", email: "jonas@heldceramics.com", spaceName: "Workshop corner", monthlyRent: 1200, leaseStart: day(-400), leaseEnd: day(30), notes: "Renewal conversation due — wants to stay, asking about the bigger unit." },
+    { company: "Slow Light Films", kind: "Space Partner", status: "Former", contactFirstName: "Ren", contactLastName: "Ito", email: "ren@slowlight.tv", spaceName: "Studio B", notes: "Moved out spring 2026 when Marta took the space." },
+  ];
+  for (const v of vendorSeed) {
+    await db.vendor.create({ data: v });
+  }
+
   return {
     projects: await db.project.count(),
     tasks: await db.task.count(),
@@ -525,5 +541,6 @@ export async function seedAll(db: PrismaClient) {
     access: await db.accessGrant.count(),
     sponsors: await db.sponsor.count(),
     tickets: await db.ticketOrder.count(),
+    vendors: await db.vendor.count(),
   };
 }

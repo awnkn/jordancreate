@@ -202,6 +202,19 @@ export const TICKET_TYPE = {
   values: ["General", "VIP", "Student", "Team", "Comp"] as const,
 };
 
+// ------------------------------------------------------------------- Vendors
+
+export const VENDOR_KIND = {
+  values: ["Supplier", "Space Partner"] as const,
+};
+
+export const VENDOR_STATUS = vocab({
+  Prospect: "neutral",
+  Active: "success",
+  Paused: "warn",
+  Former: "neutral",
+});
+
 // ---------------------------------------------------------------- Shared log
 
 export const INTERACTION_KIND = {

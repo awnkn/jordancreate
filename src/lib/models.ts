@@ -19,4 +19,5 @@ export type {
   TaskModel as Task,
   TicketOrderModel as TicketOrder,
   TopicModel as Topic,
+  VendorModel as Vendor,
 } from "@/generated/prisma/models";

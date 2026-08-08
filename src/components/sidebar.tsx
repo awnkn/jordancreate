@@ -226,6 +226,16 @@ function SectionIcon({ name }: { name: string }) {
           <path d="M14 16v2" />
         </svg>
       );
+    case "Vendors":
+      return (
+        <svg {...common}>
+          <path d="M3 21V8l6-4 6 4v13" />
+          <path d="M15 21V12h6v9" />
+          <path d="M7 12h2" />
+          <path d="M7 16h2" />
+          <path d="M2 21h20" />
+        </svg>
+      );
     case "People":
       return (
         <svg {...common}>

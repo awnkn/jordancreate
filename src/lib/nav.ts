@@ -59,6 +59,16 @@ export const NAV: NavItem[] = [
     match: ["/tickets"],
   },
   {
+    label: "Vendors",
+    href: "/vendors",
+    match: ["/vendors"],
+    children: [
+      { label: "All vendors", href: "/vendors" },
+      { label: "Suppliers", href: "/vendors/suppliers" },
+      { label: "Space Partners", href: "/vendors/space-partners" },
+    ],
+  },
+  {
     label: "People",
     href: "/people",
     match: ["/people"],
