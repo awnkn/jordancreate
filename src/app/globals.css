@@ -1,0 +1,284 @@
+@import "tailwindcss";
+
+/* ============================================================================
+   Jordan Create OS — design tokens
+
+   Direction: "the production schedule, well printed". Warm paper ground, ink
+   text, hairline rules instead of drop-shadow cards, one clay accent. The
+   signature move is oversized tabular numerals under small-caps labels, so the
+   numbers read like a printed call sheet.
+
+   Committed to a single light theme on purpose — the paper ground is the
+   design, and a dark inversion would be a different product.
+   ========================================================================= */
+
+@theme {
+  /* Ground and ink ------------------------------------------------------- */
+  --color-paper: #faf8f5;
+  --color-surface: #ffffff;
+  --color-sunk: #f2eee8;
+
+  --color-ink: #1a1613;
+  --color-ink-2: #5f574e;
+  --color-ink-3: #938a7f;
+
+  --color-rule: #e7e1d9;
+  --color-rule-strong: #d5ccc1;
+
+  /* Accent --------------------------------------------------------------- */
+  --color-clay: #a8412a;
+  --color-clay-deep: #86331f;
+  --color-clay-tint: #f4e6e0;
+
+  /* Status tones — muted tints, warm-leaning, all ≥4.5:1 on their own tint */
+  --color-tone-neutral-bg: #efeae3;
+  --color-tone-neutral-fg: #57504a;
+  --color-tone-info-bg: #e2e8ef;
+  --color-tone-info-fg: #35536e;
+  --color-tone-progress-bg: #e9e4ef;
+  --color-tone-progress-fg: #52406b;
+  --color-tone-success-bg: #e0ebde;
+  --color-tone-success-fg: #365a38;
+  --color-tone-warn-bg: #f5e9d5;
+  --color-tone-warn-fg: #6f4d16;
+  --color-tone-danger-bg: #f4e0e6;
+  --color-tone-danger-fg: #8a2846;
+
+  /* Type ----------------------------------------------------------------- */
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* Shape ---------------------------------------------------------------- */
+  --radius-xs: 3px;
+  --radius-sm: 5px;
+  --radius-md: 8px;
+}
+
+/* ---------------------------------------------------------------- base --- */
+
+html {
+  background: var(--color-paper);
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-clay-tint);
+  color: var(--color-clay-deep);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-clay);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* --------------------------------------------------------- type helpers --- */
+
+/* Small-caps label. Pairs with .numeral to make the signature stat block. */
+.label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--color-ink-3);
+}
+
+.numeral {
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums lining-nums;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--color-ink);
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.12;
+}
+
+/* ------------------------------------------------------------- controls --- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-rule-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 160ms ease-out, border-color 160ms ease-out,
+    color 160ms ease-out;
+}
+
+.btn:hover {
+  background: var(--color-sunk);
+  border-color: var(--color-ink-3);
+}
+
+.btn:active {
+  background: var(--color-rule);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--color-clay);
+  border-color: var(--color-clay);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--color-clay-deep);
+  border-color: var(--color-clay-deep);
+}
+
+.btn-primary:active {
+  background: var(--color-clay-deep);
+}
+
+.btn-danger {
+  color: var(--color-tone-danger-fg);
+}
+
+.btn-danger:hover {
+  background: var(--color-tone-danger-bg);
+  border-color: var(--color-tone-danger-fg);
+}
+
+.btn-ghost {
+  border-color: transparent;
+  background: transparent;
+  color: var(--color-ink-2);
+}
+
+.btn-ghost:hover {
+  background: var(--color-sunk);
+  border-color: var(--color-rule);
+  color: var(--color-ink);
+}
+
+/* ---------------------------------------------------------------- forms --- */
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--color-rule-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-family: inherit;
+  font-size: 13.5px;
+  line-height: 1.5;
+  transition: border-color 160ms ease-out, box-shadow 160ms ease-out;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--color-ink-3);
+}
+
+.input:hover,
+.select:hover,
+.textarea:hover {
+  border-color: var(--color-ink-3);
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--color-clay);
+  box-shadow: 0 0 0 3px var(--color-clay-tint);
+}
+
+.textarea {
+  min-height: 84px;
+  resize: vertical;
+}
+
+/* Leaves room for the leading magnifier. A Tailwind `pl-*` utility would lose
+   to `.input`'s own padding shorthand, so the variant lives here. */
+.input-search {
+  padding-left: 30px;
+}
+
+.input[type="search"]::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
+.select {
+  appearance: none;
+  padding-right: 28px;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23938a7f' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 9px center;
+}
+
+/* --------------------------------------------------------------- tables --- */
+
+.grid-table {
+  width: 100%;
+  border-collapse: collapse;
+  /* Below this the columns squeeze into unreadable stacks, so the table
+     scrolls sideways inside its .overflow-x-auto wrapper instead. */
+  min-width: 540px;
+}
+
+.grid-table thead th {
+  padding: 0 14px 8px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--color-ink-3);
+  white-space: nowrap;
+}
+
+.grid-table tbody tr {
+  border-top: 1px solid var(--color-rule);
+  transition: background-color 140ms ease-out;
+}
+
+.grid-table tbody tr:hover {
+  background: var(--color-sunk);
+}
+
+.grid-table td {
+  padding: 11px 14px;
+  vertical-align: middle;
+}
+
+/* -------------------------------------------------------------- surface --- */
+
+.panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-md);
+}

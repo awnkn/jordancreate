@@ -1,0 +1,315 @@
+// Jordan Create OS — data model
+//
+// The sections map onto these models:
+//   Operations       -> Project, Task
+//   Content          -> ContentPiece
+//   Experience       -> Event, Speaker, Topic, Booking
+//   Public Relations -> Guest (categorised)
+//   Sponsors         -> Sponsor
+//   Ticket Buyers    -> TicketOrder
+//   People           -> Person
+//   Access           -> AccessGrant
+//
+// Interaction is shared: a contact log hanging off Speakers, Guests and Sponsors.
+//
+// SQLite has no native enum type, so status/category fields are strings that are
+// constrained in the app layer. The allowed values live in src/lib/taxonomy.ts —
+// keep the two in sync.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// ---------------------------------------------------------------- Operations
+
+model Project {
+  id        String    @id @default(cuid())
+  name      String
+  client    String?
+  status    String    @default("Discovery")
+  owner     String?
+  summary   String?
+  startDate DateTime?
+  dueDate   DateTime?
+  budget    Float?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  tasks   Task[]
+  content ContentPiece[]
+  events  Event[]
+
+  @@index([status])
+}
+
+model Task {
+  id        String    @id @default(cuid())
+  title     String
+  status    String    @default("Todo")
+  priority  String    @default("Medium")
+  assignee  String?
+  dueDate   DateTime?
+  notes     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@index([projectId])
+}
+
+// ------------------------------------------------------------------- Content
+
+model ContentPiece {
+  id          String    @id @default(cuid())
+  title       String
+  format      String    @default("Article")
+  channel     String?
+  status      String    @default("Idea")
+  owner       String?
+  brief       String?
+  url         String?
+  publishDate DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  topics Topic[]
+
+  @@index([status])
+}
+
+// ---------------------------------------------------------------- Experience
+
+model Event {
+  id        String    @id @default(cuid())
+  name      String
+  format    String    @default("Conference")
+  status    String    @default("Concept")
+  venue     String?
+  city      String?
+  startDate DateTime?
+  endDate   DateTime?
+  capacity  Int?
+  summary   String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  bookings Booking[]
+  sponsors Sponsor[]
+  tickets  TicketOrder[]
+
+  @@index([status])
+}
+
+model Speaker {
+  id        String   @id @default(cuid())
+  name      String
+  role      String?
+  company   String?
+  email     String?
+  phone     String?
+  website   String?
+  location  String?
+  status    String   @default("Prospect")
+  fee       String?
+  bio       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  topics       Topic[]
+  bookings     Booking[]
+  interactions Interaction[]
+
+  @@index([status])
+}
+
+model Topic {
+  id          String   @id @default(cuid())
+  name        String
+  category    String   @default("Craft")
+  status      String   @default("Active")
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  speakers Speaker[]
+  content  ContentPiece[]
+  guests   Guest[]
+
+  @@index([status])
+}
+
+// A speaker booked onto an event — the slot they are filling.
+model Booking {
+  id        String    @id @default(cuid())
+  slotTitle String?
+  status    String    @default("Held")
+  startTime DateTime?
+  fee       Float?
+  notes     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  eventId   String
+  event     Event   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  speakerId String
+  speaker   Speaker @relation(fields: [speakerId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, speakerId])
+  @@index([status])
+}
+
+// ---------------------------------------------------------- Public Relations
+
+model Guest {
+  id           String    @id @default(cuid())
+  name         String
+  // Which kind of guest this is — the sub-sections under Public Relations.
+  category     String    @default("General Guests")
+  outlet       String?
+  showName     String?
+  format       String    @default("Podcast")
+  status       String    @default("Prospect")
+  email        String?
+  phone        String?
+  audienceSize Int?
+  scheduledFor DateTime?
+  publishedUrl String?
+  angle        String?
+  notes        String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  topics       Topic[]
+  interactions Interaction[]
+
+  @@index([status])
+  @@index([category])
+}
+
+// -------------------------------------------------------------------- People
+
+// The studio's people — staff and regular freelancers.
+model Person {
+  id        String    @id @default(cuid())
+  name      String
+  role      String?
+  status    String    @default("Core Team")
+  email     String?
+  phone     String?
+  location  String?
+  startDate DateTime?
+  notes     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  access AccessGrant[]
+
+  @@index([status])
+}
+
+// -------------------------------------------------------------------- Access
+
+// Who holds access to which system — accounts, tools, spaces, keys.
+model AccessGrant {
+  id        String   @id @default(cuid())
+  system    String
+  level     String   @default("Editor")
+  status    String   @default("Active")
+  url       String?
+  notes     String?
+  grantedAt DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  personId String
+  person   Person @relation(fields: [personId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@index([personId])
+  @@index([system])
+}
+
+// ------------------------------------------------------------------ Sponsors
+
+// The sales CRM: every sponsorship deal, from first touch to signed.
+model Sponsor {
+  id          String    @id @default(cuid())
+  company     String
+  contactName String?
+  contactRole String?
+  email       String?
+  phone       String?
+  website     String?
+  status      String    @default("Lead")
+  tier        String    @default("Partner")
+  value       Float?
+  nextStep    String?
+  closeDate   DateTime?
+  notes       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  eventId      String?
+  event        Event?        @relation(fields: [eventId], references: [id], onDelete: SetNull)
+  interactions Interaction[]
+
+  @@index([status])
+}
+
+// ------------------------------------------------------------- Ticket buyers
+
+// One row per order, not per attendee — quantity covers group buys.
+model TicketOrder {
+  id          String   @id @default(cuid())
+  buyerName   String
+  email       String?
+  ticketType  String   @default("General")
+  quantity    Int      @default(1)
+  amount      Float?
+  status      String   @default("Paid")
+  purchasedAt DateTime @default(now())
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@index([eventId])
+}
+
+// ---------------------------------------------------------------- Shared log
+
+model Interaction {
+  id        String   @id @default(cuid())
+  kind      String   @default("Note")
+  summary   String
+  occurredAt DateTime @default(now())
+  createdAt DateTime @default(now())
+
+  speakerId String?
+  speaker   Speaker? @relation(fields: [speakerId], references: [id], onDelete: Cascade)
+  guestId   String?
+  guest     Guest?   @relation(fields: [guestId], references: [id], onDelete: Cascade)
+  sponsorId String?
+  sponsor   Sponsor? @relation(fields: [sponsorId], references: [id], onDelete: Cascade)
+
+  @@index([speakerId])
+  @@index([guestId])
+  @@index([sponsorId])
+}
