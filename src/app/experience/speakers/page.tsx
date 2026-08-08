@@ -8,6 +8,7 @@ import {
   Panel,
   RowLink,
 } from "@/components/ui";
+import { Avatar } from "@/components/avatar";
 import { db } from "@/lib/db";
 import { fullName } from "@/lib/format";
 import { SPEAKER_STATUS } from "@/lib/taxonomy";
@@ -114,12 +115,22 @@ export default async function SpeakersPage({
               <tbody>
                 {speakers.map((s) => (
                   <tr key={s.id}>
-                    <td className="max-w-[260px]">
-                      <RowLink href={`/experience/speakers/${s.id}`}>
-                        {fullName(s)}
-                      </RowLink>
-                      <div className="mt-0.5 text-[12px] text-ink-3">
-                        {[s.role, s.company].filter(Boolean).join(" · ") || "—"}
+                    <td className="max-w-[280px]">
+                      <div className="flex items-center gap-2.5">
+                        <Avatar
+                          firstName={s.firstName}
+                          lastName={s.lastName}
+                          photoUrl={s.photoUrl}
+                          size={34}
+                        />
+                        <div className="min-w-0">
+                          <RowLink href={`/experience/speakers/${s.id}`}>
+                            {fullName(s)}
+                          </RowLink>
+                          <div className="mt-0.5 truncate text-[12px] text-ink-3">
+                            {[s.role, s.company].filter(Boolean).join(" · ") || "—"}
+                          </div>
+                        </div>
                       </div>
                     </td>
                     <td>

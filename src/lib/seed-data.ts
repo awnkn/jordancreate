@@ -195,6 +195,14 @@ export async function seedAll(db: PrismaClient) {
       capacity: 450,
       summary: "Two days, one stage, no panels. The whole studio ships against this date.",
       projectId: summit.id,
+      topics: {
+        connect: [
+          { id: topics["Creative Direction"].id },
+          { id: topics["Building a Studio"].id },
+          { id: topics["Brand Systems"].id },
+          { id: topics["AI in the Studio"].id },
+        ],
+      },
     },
   });
 
@@ -209,6 +217,7 @@ export async function seedAll(db: PrismaClient) {
       endDate: day(16),
       capacity: 24,
       summary: "One-day intensive on building a brand system that survives handoff.",
+      topics: { connect: [{ id: topics["Brand Systems"].id }] },
     },
   });
 
@@ -221,6 +230,7 @@ export async function seedAll(db: PrismaClient) {
       startDate: day(84),
       capacity: 18,
       summary: "Small table, no programming. Testing whether this becomes a series.",
+      topics: { connect: [{ id: topics["Building a Studio"].id }] },
     },
   });
 

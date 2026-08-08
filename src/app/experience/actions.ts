@@ -37,13 +37,25 @@ function eventData(form: FormData) {
 }
 
 export async function createEvent(form: FormData) {
-  const event = await db.event.create({ data: eventData(form) });
+  const event = await db.event.create({
+    data: {
+      ...eventData(form),
+      topics: { connect: topicIds(form).map((id) => ({ id })) },
+    },
+  });
   revalidateAll();
   redirect(`/experience/${event.id}`);
 }
 
 export async function updateEvent(id: string, form: FormData) {
-  await db.event.update({ where: { id }, data: eventData(form) });
+  await db.event.update({
+    where: { id },
+    data: {
+      ...eventData(form),
+      // `set` replaces the list, so unchecking a topic actually removes it.
+      topics: { set: topicIds(form).map((tid) => ({ id: tid })) },
+    },
+  });
   revalidateAll();
   redirect(`/experience/${id}`);
 }
@@ -60,6 +72,7 @@ function speakerData(form: FormData) {
   return {
     firstName: (nullify(form.get("firstName")) ?? "Unnamed") as string,
     lastName: (nullify(form.get("lastName")) ?? "") as string,
+    photoUrl: nullify(form.get("photoUrl")),
     role: nullify(form.get("role")),
     company: nullify(form.get("company")),
     email: nullify(form.get("email")),
@@ -128,6 +141,25 @@ export async function deleteTopic(id: string) {
   await db.topic.delete({ where: { id } });
   revalidateAll();
   redirect("/experience/topics");
+}
+
+/** Match a speaker to a topic from the topic page. */
+export async function addSpeakerToTopic(topicId: string, form: FormData) {
+  const speakerId = nullify(form.get("speakerId"));
+  if (!speakerId) return;
+  await db.topic.update({
+    where: { id: topicId },
+    data: { speakers: { connect: { id: speakerId } } },
+  });
+  revalidateAll();
+}
+
+export async function removeSpeakerFromTopic(topicId: string, speakerId: string) {
+  await db.topic.update({
+    where: { id: topicId },
+    data: { speakers: { disconnect: { id: speakerId } } },
+  });
+  revalidateAll();
 }
 
 // ----------------------------------------------------------------- Bookings

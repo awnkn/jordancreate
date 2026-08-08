@@ -6,16 +6,20 @@ import { EventForm } from "../event-form";
 export const dynamic = "force-dynamic";
 
 export default async function NewEventPage() {
-  const projects = await db.project.findMany({
-    select: { id: true, name: true },
-    orderBy: { name: "asc" },
-  });
+  const [projects, topics] = await Promise.all([
+    db.project.findMany({ select: { id: true, name: true }, orderBy: { name: "asc" } }),
+    db.topic.findMany({
+      select: { id: true, name: true, category: true },
+      orderBy: { name: "asc" },
+    }),
+  ]);
 
   return (
     <>
       <PageHeader eyebrow="Experience" title="New event" />
       <EventForm
         projects={projects}
+        topics={topics}
         action={createEvent}
         submitLabel="Create event"
         cancelHref="/experience"

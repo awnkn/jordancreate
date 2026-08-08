@@ -1,5 +1,13 @@
 import { CancelLink, SubmitButton } from "@/components/form-actions";
-import { Field, FormGrid, Input, Select, Textarea } from "@/components/form";
+import {
+  Field,
+  FormGrid,
+  FormSection,
+  Input,
+  Select,
+  Textarea,
+  TopicPicker,
+} from "@/components/form";
 import { Panel } from "@/components/ui";
 import { dateInputValue } from "@/lib/format";
 import { EVENT_FORMAT, EVENT_STATUS } from "@/lib/taxonomy";
@@ -8,12 +16,16 @@ import type { Event } from "@/lib/models";
 export function EventForm({
   event,
   projects,
+  topics,
+  selectedTopicIds = [],
   action,
   submitLabel,
   cancelHref,
 }: {
   event?: Event | null;
   projects: { id: string; name: string }[];
+  topics: { id: string; name: string; category: string }[];
+  selectedTopicIds?: string[];
   action: (form: FormData) => Promise<void>;
   submitLabel: string;
   cancelHref: string;
@@ -111,6 +123,12 @@ export function EventForm({
             />
           </Field>
         </FormGrid>
+
+        <div className="mt-6">
+          <FormSection title="Topics this experience covers">
+            <TopicPicker topics={topics} selected={selectedTopicIds} />
+          </FormSection>
+        </div>
       </Panel>
 
       <div className="mt-4 flex items-center gap-2">

@@ -12,6 +12,7 @@ import {
   Panel,
   RowLink,
 } from "@/components/ui";
+import { Avatar } from "@/components/avatar";
 import { db } from "@/lib/db";
 import { formatDate, formatMoney, fullName } from "@/lib/format";
 import { BOOKING_STATUS, SPEAKER_STATUS } from "@/lib/taxonomy";
@@ -74,6 +75,14 @@ export default async function SpeakerPage({
 
   return (
     <>
+      <div className="float-left mr-4 mb-2 hidden sm:block">
+        <Avatar
+          firstName={speaker.firstName}
+          lastName={speaker.lastName}
+          photoUrl={speaker.photoUrl}
+          size={64}
+        />
+      </div>
       <PageHeader
         eyebrow="Experience · Speaker"
         title={fullName(speaker)}

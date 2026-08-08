@@ -30,7 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${inter.variable} ${fraunces.variable} h-full antialiased`}
     >
       <body className="min-h-full">
-        <div className="lg:flex">
+        <div className="lg:flex lg:min-h-dvh">
           <Sidebar />
           <main className="min-w-0 flex-1">
             <div className="mx-auto max-w-[1180px] px-5 py-8 sm:px-8 lg:py-10">

@@ -49,6 +49,19 @@ export function SpeakerForm({
             />
           </Field>
 
+          <Field
+            label="Photo URL"
+            span={2}
+            hint="A square headshot works best — paste a link to an image hosted anywhere."
+          >
+            <Input
+              type="url"
+              name="photoUrl"
+              defaultValue={speaker?.photoUrl ?? ""}
+              placeholder="https://…/maya.jpg"
+            />
+          </Field>
+
           <Field label="Role">
             <Input
               name="role"

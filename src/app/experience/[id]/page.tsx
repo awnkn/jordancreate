@@ -14,6 +14,7 @@ import {
   Stat,
   StatRow,
 } from "@/components/ui";
+import { Avatar } from "@/components/avatar";
 import { db } from "@/lib/db";
 import { dateInputValue, formatMoney, formatRange, fullName, relativeDays } from "@/lib/format";
 import { BOOKING_STATUS, EVENT_STATUS } from "@/lib/taxonomy";
@@ -29,21 +30,31 @@ export default async function EventPage({
   const { id } = await params;
   const { edit } = await searchParams;
 
-  const [event, projects, speakers] = await Promise.all([
+  const [event, projects, speakers, topics] = await Promise.all([
     db.event.findUnique({
       where: { id },
       include: {
         project: { select: { id: true, name: true } },
+        topics: { select: { id: true, name: true } },
         bookings: {
-          include: { speaker: { select: { id: true, firstName: true, lastName: true, company: true, status: true } } },
+          include: { speaker: { select: { id: true, firstName: true, lastName: true, photoUrl: true, company: true, status: true } } },
           orderBy: [{ startTime: "asc" }],
         },
       },
     }),
     db.project.findMany({ select: { id: true, name: true }, orderBy: { name: "asc" } }),
     db.speaker.findMany({
-      select: { id: true, firstName: true, lastName: true },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        topics: { select: { id: true } },
+      },
       orderBy: [{ firstName: "asc" }, { lastName: "asc" }],
+    }),
+    db.topic.findMany({
+      select: { id: true, name: true, category: true },
+      orderBy: { name: "asc" },
     }),
   ]);
 
@@ -57,6 +68,8 @@ export default async function EventPage({
         <EventForm
           event={event}
           projects={projects}
+          topics={topics}
+          selectedTopicIds={event.topics.map((t) => t.id)}
           action={update}
           submitLabel="Save changes"
           cancelHref={`/experience/${event.id}`}
@@ -70,9 +83,17 @@ export default async function EventPage({
   const book = createBooking.bind(null, event.id);
   const del = deleteEvent.bind(null, event.id);
 
-  // Only offer speakers who aren't already on the bill.
+  // Only offer speakers who aren't already on the bill — and surface the ones
+  // who cover this event's topics first. That's the match this page is for.
   const booked = new Set(event.bookings.map((b) => b.speakerId));
+  const eventTopicIds = new Set(event.topics.map((t) => t.id));
   const available = speakers.filter((s) => !booked.has(s.id));
+  const matching = available.filter((s) =>
+    s.topics.some((t) => eventTopicIds.has(t.id)),
+  );
+  const others = available.filter(
+    (s) => !s.topics.some((t) => eventTopicIds.has(t.id)),
+  );
 
   return (
     <>
@@ -125,6 +146,19 @@ export default async function EventPage({
               <Detail label="Venue">{event.venue ?? "—"}</Detail>
               <Detail label="City">{event.city ?? "—"}</Detail>
               <Detail label="Capacity">{event.capacity ?? "—"}</Detail>
+              <Detail label="Topics">
+                {event.topics.length === 0 ? (
+                  "—"
+                ) : (
+                  <div className="flex flex-wrap gap-1">
+                    {event.topics.map((t) => (
+                      <Link key={t.id} href={`/experience/topics/${t.id}`}>
+                        <Chip>{t.name}</Chip>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </Detail>
               <Detail label="Project">
                 {event.project ? (
                   <Link
@@ -157,13 +191,39 @@ export default async function EventPage({
               </p>
             ) : (
               <form action={book} className="space-y-3 px-5 py-4">
-                <Field label="Speaker">
+                <Field
+                  label="Speaker"
+                  hint={
+                    matching.length > 0
+                      ? "Speakers covering this event's topics are listed first."
+                      : undefined
+                  }
+                >
                   <select name="speakerId" className="select" required>
-                    {available.map((s) => (
-                      <option key={s.id} value={s.id}>
-                        {fullName(s)}
-                      </option>
-                    ))}
+                    {matching.length > 0 ? (
+                      <>
+                        <optgroup label="Cover this event's topics">
+                          {matching.map((s) => (
+                            <option key={s.id} value={s.id}>
+                              {fullName(s)}
+                            </option>
+                          ))}
+                        </optgroup>
+                        <optgroup label="Other speakers">
+                          {others.map((s) => (
+                            <option key={s.id} value={s.id}>
+                              {fullName(s)}
+                            </option>
+                          ))}
+                        </optgroup>
+                      </>
+                    ) : (
+                      available.map((s) => (
+                        <option key={s.id} value={s.id}>
+                          {fullName(s)}
+                        </option>
+                      ))
+                    )}
                   </select>
                 </Field>
                 <Field label="Slot">
@@ -214,14 +274,24 @@ export default async function EventPage({
                     return (
                       <tr key={b.id}>
                         <td>
+                          <div className="flex items-center gap-2.5">
+                            <Avatar
+                              firstName={b.speaker.firstName}
+                              lastName={b.speaker.lastName}
+                              photoUrl={b.speaker.photoUrl}
+                              size={32}
+                            />
+                            <div className="min-w-0">
                           <RowLink href={`/experience/speakers/${b.speaker.id}`}>
                             {fullName(b.speaker)}
                           </RowLink>
                           {/* Deliberately no speaker-status badge here — the
                               Booking column already says "Confirmed", and two
                               badges with the same word mean different things. */}
-                          <div className="mt-0.5 text-[12px] text-ink-3">
-                            {b.speaker.company ?? "—"}
+                              <div className="mt-0.5 text-[12px] text-ink-3">
+                                {b.speaker.company ?? "—"}
+                              </div>
+                            </div>
                           </div>
                         </td>
                         <td className="max-w-[280px] text-ink-2">

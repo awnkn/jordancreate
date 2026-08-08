@@ -88,7 +88,7 @@ export default async function Dashboard() {
           day: "numeric",
           month: "long",
         })}
-        title="The studio, today"
+        title="The Frame, today"
         lede="What's due, what's shipping, and who's on the next stage."
       />
 

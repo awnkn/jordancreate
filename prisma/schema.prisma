@@ -110,6 +110,7 @@ model Event {
   bookings Booking[]
   sponsors Sponsor[]
   tickets  TicketOrder[]
+  topics   Topic[]
 
   @@index([status])
 }
@@ -118,6 +119,7 @@ model Speaker {
   id        String   @id @default(cuid())
   firstName String
   lastName  String
+  photoUrl  String?
   role      String?
   company   String?
   email     String?
@@ -149,6 +151,7 @@ model Topic {
   speakers Speaker[]
   content  ContentPiece[]
   guests   Guest[]
+  events   Event[]
 
   @@index([status])
 }
