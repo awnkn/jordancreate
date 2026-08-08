@@ -99,20 +99,25 @@ src/
     db.ts, format.ts, nav.ts, models.ts
 ```
 
-## Deploying
+## Deploying (Render + Supabase)
 
-The repo is Vercel-ready:
+The repo ships a `render.yaml` Blueprint, so Render configures itself:
 
-1. Push to GitHub (done if you're reading this there).
-2. On [vercel.com](https://vercel.com) → **Add New → Project** → import this repo.
-   The `vercel-build` script runs migrations automatically on every deploy.
-3. Give it a database: in the Vercel project, **Storage → Create Database →
-   Neon (Postgres)** — this injects `DATABASE_URL` automatically. Any other
-   Postgres host works too; just set `DATABASE_URL` in the project's
-   environment variables.
-4. Optional demo data: set a `SETUP_TOKEN` env var, redeploy, then visit
-   `https://<your-app>.vercel.app/api/seed?token=<SETUP_TOKEN>` once.
-   Remove the env var when you start entering real data.
+1. **Supabase** → your project → **Connect** → copy the **Session pooler**
+   connection string (port 5432, host ends in `pooler.supabase.com`).
+   ⚠ Not the direct connection — it's IPv6-only and unreachable from Render.
+2. **Render** → **New + → Blueprint** → pick this repo → paste that string
+   when prompted for `DATABASE_URL` → **Apply**. The build runs
+   `prisma migrate deploy`, so the schema lands automatically — now and on
+   every future deploy.
+3. Optional demo data: Render auto-generates a `SETUP_TOKEN` env var (see the
+   service's **Environment** tab). Visit
+   `https://<your-app>.onrender.com/api/seed?token=<SETUP_TOKEN>` once.
+   Delete the env var when you start entering real data.
+
+Notes: the free plan sleeps when idle (~1 min cold start) — upgrade the plan
+in `render.yaml` or the dashboard for always-on. A `vercel-build` script also
+exists if you ever prefer Vercel.
 
 ## Design
 

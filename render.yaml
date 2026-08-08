@@ -1,0 +1,20 @@
+# Render Blueprint — creates the web service preconfigured.
+# In Render: New + → Blueprint → pick this repo → paste DATABASE_URL when asked.
+#
+# DATABASE_URL must be the Supabase **Session pooler** string (port 5432,
+# …pooler.supabase.com). Supabase's direct connection is IPv6-only and Render
+# egress is IPv4, so the direct string will not connect from Render.
+
+services:
+  - type: web
+    name: jordancreate-os
+    runtime: node
+    plan: free # spins down when idle (~1 min cold start); upgrade to starter for always-on
+    branch: claude/jordan-create-os-zv6tab
+    buildCommand: npm ci && npm run render-build
+    startCommand: npm run start
+    envVars:
+      - key: DATABASE_URL
+        sync: false # prompted for on Blueprint creation — paste the Supabase pooler URL
+      - key: SETUP_TOKEN
+        generateValue: true # enables the one-time /api/seed demo-data loader
