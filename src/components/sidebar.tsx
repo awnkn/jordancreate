@@ -15,7 +15,7 @@ export function Sidebar() {
   return (
     <>
       {/* Mobile bar ---------------------------------------------------- */}
-      <div className="sticky top-0 z-30 flex items-center justify-between bg-ink/95 px-4 py-2.5 backdrop-blur lg:hidden">
+      <div className="sticky top-0 z-30 flex items-center justify-between bg-rail/95 px-4 py-2.5 backdrop-blur lg:hidden">
         <Wordmark onNavigate={close} compact />
         <button
           type="button"
@@ -31,7 +31,7 @@ export function Sidebar() {
 
       {open ? (
         <div
-          className="fixed inset-0 z-30 bg-ink/40 lg:hidden"
+          className="fixed inset-0 z-30 bg-rail/60 lg:hidden"
           onClick={() => setOpen(false)}
           aria-hidden
         />
@@ -39,7 +39,7 @@ export function Sidebar() {
 
       {/* Rail ---------------------------------------------------------- */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 w-[236px] shrink-0 overflow-y-auto bg-ink transition-transform duration-200 ease-out lg:static lg:translate-x-0 lg:self-stretch lg:overflow-visible ${
+        className={`fixed inset-y-0 left-0 z-40 w-[236px] shrink-0 overflow-y-auto bg-rail transition-transform duration-200 ease-out lg:static lg:translate-x-0 lg:self-stretch lg:overflow-visible ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -60,7 +60,7 @@ export function Sidebar() {
                     onClick={close}
                     className={`flex items-center gap-2.5 rounded-sm px-2.5 py-1.5 text-[13.5px] font-medium transition-colors ${
                       sectionActive
-                        ? "bg-paper/10 text-paper"
+                        ? "bg-gradient-to-r from-clay-bright/25 via-clay-bright/10 to-transparent text-paper"
                         : "text-paper/55 hover:bg-paper/5 hover:text-paper"
                     }`}
                   >

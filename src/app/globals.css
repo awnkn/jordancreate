@@ -19,17 +19,21 @@
   --color-sunk: #f2eee8;
 
   --color-ink: #1a1613;
+  /* The navigation rail's ground — deeper than text ink, near-true black. */
+  --color-rail: #0d0b09;
   --color-ink-2: #5f574e;
   --color-ink-3: #938a7f;
 
   --color-rule: #e7e1d9;
   --color-rule-strong: #d5ccc1;
 
-  /* Accent --------------------------------------------------------------- */
-  --color-clay: #a8412a;
-  --color-clay-bright: #e8703f;
-  --color-clay-deep: #86331f;
-  --color-clay-tint: #f4e6e0;
+  /* Accent — the brand orange #EA8F2D and its shades ---------------------- */
+  --color-clay: #a85e0c; /* text-size accent: dark shade, ≥4.5:1 on paper */
+  --color-clay-bright: #ea8f2d; /* the brand hex itself — for dark grounds */
+  --color-clay-deep: #8a4c09;
+  --color-clay-tint: #faeddc;
+  --color-clay-light: #f4b563;
+  --color-clay-mid: #d0741a;
 
   /* Status tones — muted tints, warm-leaning, all ≥4.5:1 on their own tint */
   --color-tone-neutral-bg: #efeae3;
@@ -147,18 +151,29 @@ body {
 }
 
 .btn-primary {
-  background: var(--color-clay);
-  border-color: var(--color-clay);
-  color: #fff;
+  background-image: linear-gradient(
+    135deg,
+    var(--color-clay-light) 0%,
+    var(--color-clay-bright) 55%,
+    var(--color-clay-mid) 100%
+  );
+  border-color: var(--color-clay-mid);
+  color: #331d04;
 }
 
 .btn-primary:hover {
-  background: var(--color-clay-deep);
-  border-color: var(--color-clay-deep);
+  background-image: linear-gradient(
+    135deg,
+    var(--color-clay-bright) 0%,
+    var(--color-clay-mid) 60%,
+    #b35f0f 100%
+  );
+  border-color: #b35f0f;
+  color: #241402;
 }
 
 .btn-primary:active {
-  background: var(--color-clay-deep);
+  background-image: linear-gradient(135deg, var(--color-clay-mid), #b35f0f);
 }
 
 .btn-danger {
@@ -282,4 +297,25 @@ body {
   background: var(--color-surface);
   border: 1px solid var(--color-rule);
   border-radius: var(--radius-md);
+}
+
+/* ------------------------------------------------------------- gradients --- */
+
+/* The brand gradient, matching the gilded frame: light → #EA8F2D → deep. */
+.bg-accent-gradient {
+  background-image: linear-gradient(
+    135deg,
+    var(--color-clay-light) 0%,
+    var(--color-clay-bright) 55%,
+    var(--color-clay-mid) 100%
+  );
+}
+
+/* Horizontal variant for meters and pipeline bars. */
+.bg-accent-gradient-x {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-clay-bright) 0%,
+    var(--color-clay-mid) 100%
+  );
 }

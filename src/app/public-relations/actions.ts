@@ -87,4 +87,5 @@ export async function logGuestInteraction(guestId: string, form: FormData) {
       occurredAt: toDate(form.get("occurredAt")) ?? new Date(),
     },
   });
+  revalidateAll();
 }

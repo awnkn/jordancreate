@@ -360,7 +360,7 @@ function PipelineBars({
               </span>
               <span className="h-1.5 overflow-hidden rounded-full bg-sunk">
                 <span
-                  className="block h-full rounded-full bg-clay/70 transition-all group-hover:bg-clay"
+                  className="bg-accent-gradient-x block h-full rounded-full opacity-85 transition-opacity group-hover:opacity-100"
                   style={{ width: `${(n / max) * 100}%` }}
                 />
               </span>
