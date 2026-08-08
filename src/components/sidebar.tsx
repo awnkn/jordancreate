@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { NAV, isActive, isSectionActive } from "@/lib/nav";
 
-export function Sidebar({ logoSrc }: { logoSrc: string }) {
+/** The navigation rail — ink-black, carrying the full brand lockup. */
+export function Sidebar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   // Every nav link closes the mobile drawer on the way out.
@@ -14,12 +15,12 @@ export function Sidebar({ logoSrc }: { logoSrc: string }) {
   return (
     <>
       {/* Mobile bar ---------------------------------------------------- */}
-      <div className="sticky top-0 z-30 flex items-center justify-between border-b border-rule bg-paper/95 px-4 py-2.5 backdrop-blur lg:hidden">
-        <Wordmark onNavigate={close} logoSrc={logoSrc} />
+      <div className="sticky top-0 z-30 flex items-center justify-between bg-ink/95 px-4 py-2.5 backdrop-blur lg:hidden">
+        <Wordmark onNavigate={close} compact />
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="btn btn-ghost"
+          className="inline-flex h-8 items-center gap-1.5 rounded-sm border border-paper/20 px-3 text-[13px] font-medium text-paper/80 transition-colors hover:bg-paper/10 hover:text-paper"
           aria-expanded={open}
           aria-label={open ? "Close navigation" : "Open navigation"}
         >
@@ -30,7 +31,7 @@ export function Sidebar({ logoSrc }: { logoSrc: string }) {
 
       {open ? (
         <div
-          className="fixed inset-0 z-30 bg-ink/20 lg:hidden"
+          className="fixed inset-0 z-30 bg-ink/40 lg:hidden"
           onClick={() => setOpen(false)}
           aria-hidden
         />
@@ -38,69 +39,69 @@ export function Sidebar({ logoSrc }: { logoSrc: string }) {
 
       {/* Rail ---------------------------------------------------------- */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 w-[236px] shrink-0 overflow-y-auto border-r border-rule bg-paper transition-transform duration-200 ease-out lg:static lg:translate-x-0 lg:self-stretch lg:overflow-visible ${
+        className={`fixed inset-y-0 left-0 z-40 w-[236px] shrink-0 overflow-y-auto bg-ink transition-transform duration-200 ease-out lg:static lg:translate-x-0 lg:self-stretch lg:overflow-visible ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        {/* The rail stretches to full page height so its rule runs edge to edge;
-            this inner block is what actually sticks while the page scrolls. */}
+        {/* The rail stretches to full page height; this inner block is what
+            actually sticks while the page scrolls. */}
         <div className="lg:sticky lg:top-0 lg:max-h-dvh lg:overflow-y-auto">
-        <div className="hidden px-5 pt-6 pb-5 lg:block">
-          <Wordmark logoSrc={logoSrc} />
-        </div>
+          <div className="hidden px-5 pt-6 pb-6 lg:block">
+            <Wordmark />
+          </div>
 
-        <nav className="px-3 pt-4 pb-8 lg:pt-0">
-          {NAV.map((item) => {
-            const sectionActive = isSectionActive(pathname, item);
-            return (
-              <div key={item.href} className="mb-0.5">
-                <Link
-                  href={item.href}
-                  onClick={close}
-                  className={`flex items-center gap-2.5 rounded-sm px-2.5 py-1.5 text-[13.5px] font-medium transition-colors ${
-                    sectionActive
-                      ? "bg-clay-tint text-clay-deep"
-                      : "text-ink-2 hover:bg-sunk hover:text-ink"
-                  }`}
-                >
-                  <span className={sectionActive ? "text-clay" : "text-ink-3"}>
-                    <SectionIcon name={item.label} />
-                  </span>
-                  {item.label}
-                </Link>
+          <nav className="px-3 pt-4 pb-8 lg:pt-0">
+            {NAV.map((item) => {
+              const sectionActive = isSectionActive(pathname, item);
+              return (
+                <div key={item.href} className="mb-0.5">
+                  <Link
+                    href={item.href}
+                    onClick={close}
+                    className={`flex items-center gap-2.5 rounded-sm px-2.5 py-1.5 text-[13.5px] font-medium transition-colors ${
+                      sectionActive
+                        ? "bg-paper/10 text-paper"
+                        : "text-paper/55 hover:bg-paper/5 hover:text-paper"
+                    }`}
+                  >
+                    <span className={sectionActive ? "text-clay-bright" : "text-paper/35"}>
+                      <SectionIcon name={item.label} />
+                    </span>
+                    {item.label}
+                  </Link>
 
-                {item.children && sectionActive ? (
-                  <div className="mt-0.5 mb-2 ml-[26px] border-l border-rule pl-2.5">
-                    {item.children.map((child) => {
-                      // Sibling sub-pages share a prefix with the section index,
-                      // so the index link must match exactly.
-                      const childActive =
-                        child.href === item.href
-                          ? !item.children!.some(
-                              (c) => c.href !== item.href && isActive(pathname, c.href),
-                            )
-                          : isActive(pathname, child.href);
-                      return (
-                        <Link
-                          key={child.href}
-                          href={child.href}
-                          onClick={close}
-                          className={`block rounded-sm px-2 py-1 text-[13px] transition-colors ${
-                            childActive
-                              ? "font-medium text-ink"
-                              : "text-ink-3 hover:text-ink"
-                          }`}
-                        >
-                          {child.label}
-                        </Link>
-                      );
-                    })}
-                  </div>
-                ) : null}
-              </div>
-            );
-          })}
-        </nav>
+                  {item.children && sectionActive ? (
+                    <div className="mt-0.5 mb-2 ml-[26px] border-l border-paper/15 pl-2.5">
+                      {item.children.map((child) => {
+                        // Sibling sub-pages share a prefix with the section index,
+                        // so the index link must match exactly.
+                        const childActive =
+                          child.href === item.href
+                            ? !item.children!.some(
+                                (c) => c.href !== item.href && isActive(pathname, c.href),
+                              )
+                            : isActive(pathname, child.href);
+                        return (
+                          <Link
+                            key={child.href}
+                            href={child.href}
+                            onClick={close}
+                            className={`block rounded-sm px-2 py-1 text-[13px] transition-colors ${
+                              childActive
+                                ? "font-medium text-paper"
+                                : "text-paper/45 hover:text-paper"
+                            }`}
+                          >
+                            {child.label}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  ) : null}
+                </div>
+              );
+            })}
+          </nav>
         </div>
       </aside>
     </>
@@ -109,32 +110,25 @@ export function Sidebar({ logoSrc }: { logoSrc: string }) {
 
 function Wordmark({
   onNavigate,
-  logoSrc,
+  compact = false,
 }: {
   onNavigate?: () => void;
-  logoSrc: string;
+  compact?: boolean;
 }) {
   return (
-    <Link href="/" onClick={onNavigate} className="group flex items-center gap-2.5">
-      {/* eslint-disable-next-line @next/next/no-img-element -- a fixed-size
-          brand mark; next/image would add a layout wrapper for no benefit */}
+    <Link href="/" onClick={onNavigate} className="group block">
+      {/* eslint-disable-next-line @next/next/no-img-element -- fixed-size
+          brand asset; next/image adds a layout wrapper for no benefit */}
       <img
-        src={logoSrc}
-        alt=""
-        width={26}
-        height={32}
-        className="h-8 w-[26px] shrink-0 object-contain"
+        src="/logo-full.png"
+        alt="Jordan Create"
+        className={compact ? "h-7 w-auto" : "h-[58px] w-auto"}
       />
-      <span className="min-w-0">
-        {/* Two-tone lockup, as in the brand asset. */}
-        <span className="block text-[12.5px] leading-none font-medium tracking-[0.18em] whitespace-nowrap">
-          <span className="text-ink">JORDAN</span>{" "}
-          <span className="text-ink-3">CREATE</span>
-        </span>
-        <span className="label mt-1.5 block transition-colors group-hover:text-clay">
+      {compact ? null : (
+        <span className="label mt-2.5 block text-paper/40 transition-colors group-hover:text-clay-bright">
           Operating System
         </span>
-      </span>
+      )}
     </Link>
   );
 }
@@ -216,7 +210,6 @@ function SectionIcon({ name }: { name: string }) {
         </svg>
       );
     case "Sponsors":
-      // Handshake-adjacent: a briefcase with an upward deal line.
       return (
         <svg {...common}>
           <rect x="3" y="8" width="18" height="12" rx="2" />
