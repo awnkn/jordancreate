@@ -8,7 +8,7 @@ import {
   RowLink,
 } from "@/components/ui";
 import { db } from "@/lib/db";
-import { formatDate } from "@/lib/format";
+import { formatDate, fullName } from "@/lib/format";
 import { PERSON_STATUS } from "@/lib/taxonomy";
 
 export const dynamic = "force-dynamic";
@@ -25,7 +25,8 @@ export default async function PeoplePage({ searchParams }: PageProps<"/people">)
         ...(q
           ? {
               OR: [
-                { name: { contains: q } },
+                { firstName: { contains: q } },
+                { lastName: { contains: q } },
                 { role: { contains: q } },
                 { location: { contains: q } },
               ],
@@ -33,7 +34,7 @@ export default async function PeoplePage({ searchParams }: PageProps<"/people">)
           : {}),
       },
       include: { _count: { select: { access: true } } },
-      orderBy: { name: "asc" },
+      orderBy: [{ firstName: "asc" }, { lastName: "asc" }],
     }),
     db.person.groupBy({ by: ["status"], _count: true }),
   ]);
@@ -107,7 +108,7 @@ export default async function PeoplePage({ searchParams }: PageProps<"/people">)
                 {people.map((p) => (
                   <tr key={p.id}>
                     <td className="max-w-[240px]">
-                      <RowLink href={`/people/${p.id}`}>{p.name}</RowLink>
+                      <RowLink href={`/people/${p.id}`}>{fullName(p)}</RowLink>
                       <div className="mt-0.5 text-[12px] text-ink-3">
                         {p.role ?? "—"}
                       </div>

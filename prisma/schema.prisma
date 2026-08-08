@@ -116,7 +116,8 @@ model Event {
 
 model Speaker {
   id        String   @id @default(cuid())
-  name      String
+  firstName String
+  lastName  String
   role      String?
   company   String?
   email     String?
@@ -176,7 +177,8 @@ model Booking {
 
 model Guest {
   id           String    @id @default(cuid())
-  name         String
+  firstName    String
+  lastName     String
   // Which kind of guest this is — the sub-sections under Public Relations.
   category     String    @default("General Guests")
   outlet       String?
@@ -205,7 +207,8 @@ model Guest {
 // The studio's people — staff and regular freelancers.
 model Person {
   id        String    @id @default(cuid())
-  name      String
+  firstName String
+  lastName  String
   role      String?
   status    String    @default("Core Team")
   email     String?
@@ -248,9 +251,10 @@ model AccessGrant {
 // The sales CRM: every sponsorship deal, from first touch to signed.
 model Sponsor {
   id          String    @id @default(cuid())
-  company     String
-  contactName String?
-  contactRole String?
+  company          String
+  contactFirstName String?
+  contactLastName  String?
+  contactRole      String?
   email       String?
   phone       String?
   website     String?
@@ -274,8 +278,9 @@ model Sponsor {
 
 // One row per order, not per attendee — quantity covers group buys.
 model TicketOrder {
-  id          String   @id @default(cuid())
-  buyerName   String
+  id             String   @id @default(cuid())
+  buyerFirstName String
+  buyerLastName  String
   email       String?
   ticketType  String   @default("General")
   quantity    Int      @default(1)

@@ -13,7 +13,7 @@ import {
   StatRow,
 } from "@/components/ui";
 import { db } from "@/lib/db";
-import { dateInputValue, formatDate } from "@/lib/format";
+import { dateInputValue, formatDate, fullName } from "@/lib/format";
 import { ACCESS_LEVEL, ACCESS_STATUS } from "@/lib/taxonomy";
 import {
   createGrant,
@@ -36,16 +36,20 @@ export default async function AccessPage({ searchParams }: PageProps<"/access">)
           ? {
               OR: [
                 { system: { contains: q } },
-                { person: { name: { contains: q } } },
+                { person: { firstName: { contains: q } } },
+                { person: { lastName: { contains: q } } },
               ],
             }
           : {}),
       },
-      include: { person: { select: { id: true, name: true, status: true } } },
+      include: { person: { select: { id: true, firstName: true, lastName: true, status: true } } },
       orderBy: [{ system: "asc" }, { createdAt: "asc" }],
     }),
     db.accessGrant.groupBy({ by: ["status"], _count: true }),
-    db.person.findMany({ select: { id: true, name: true }, orderBy: { name: "asc" } }),
+    db.person.findMany({
+      select: { id: true, firstName: true, lastName: true },
+      orderBy: [{ firstName: "asc" }, { lastName: "asc" }],
+    }),
   ]);
 
   const counts = Object.fromEntries(all.map((r) => [r.status, r._count]));
@@ -100,7 +104,7 @@ export default async function AccessPage({ searchParams }: PageProps<"/access">)
                 <select name="personId" required className="select">
                   {people.map((p) => (
                     <option key={p.id} value={p.id}>
-                      {p.name}
+                      {fullName(p)}
                     </option>
                   ))}
                 </select>
@@ -172,7 +176,7 @@ export default async function AccessPage({ searchParams }: PageProps<"/access">)
                       </td>
                       <td>
                         <RowLink href={`/people/${g.person.id}`}>
-                          {g.person.name}
+                          {fullName(g.person)}
                         </RowLink>
                         {alumniRisk ? (
                           <span className="ml-2 text-[11px] text-tone-danger-fg">

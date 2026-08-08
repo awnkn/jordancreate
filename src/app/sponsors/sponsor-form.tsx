@@ -31,11 +31,19 @@ export function SponsorForm({
             />
           </Field>
 
-          <Field label="Contact name">
+          <Field label="Contact first name">
             <Input
-              name="contactName"
-              defaultValue={sponsor?.contactName ?? ""}
-              placeholder="Ana Duarte"
+              name="contactFirstName"
+              defaultValue={sponsor?.contactFirstName ?? ""}
+              placeholder="Ana"
+            />
+          </Field>
+
+          <Field label="Contact last name">
+            <Input
+              name="contactLastName"
+              defaultValue={sponsor?.contactLastName ?? ""}
+              placeholder="Duarte"
             />
           </Field>
 

@@ -14,7 +14,8 @@ import {
 function sponsorData(form: FormData) {
   return {
     company: (nullify(form.get("company")) ?? "Unnamed company") as string,
-    contactName: nullify(form.get("contactName")),
+    contactFirstName: nullify(form.get("contactFirstName")),
+    contactLastName: nullify(form.get("contactLastName")),
     contactRole: nullify(form.get("contactRole")),
     email: nullify(form.get("email")),
     phone: nullify(form.get("phone")),

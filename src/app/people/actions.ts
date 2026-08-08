@@ -15,7 +15,8 @@ import {
 
 function personData(form: FormData) {
   return {
-    name: (nullify(form.get("name")) ?? "Unnamed person") as string,
+    firstName: (nullify(form.get("firstName")) ?? "Unnamed") as string,
+    lastName: (nullify(form.get("lastName")) ?? "") as string,
     role: nullify(form.get("role")),
     status: constrain(form.get("status"), PERSON_STATUS.values, "Core Team"),
     email: nullify(form.get("email")),

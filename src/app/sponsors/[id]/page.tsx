@@ -15,7 +15,7 @@ import {
   StatRow,
 } from "@/components/ui";
 import { db } from "@/lib/db";
-import { formatDate, formatMoney, relativeDays } from "@/lib/format";
+import { formatDate, formatMoney, fullName, relativeDays } from "@/lib/format";
 import { SPONSOR_STATUS } from "@/lib/taxonomy";
 import {
   deleteSponsor,
@@ -75,7 +75,17 @@ export default async function SponsorPage({
         eyebrow="Sponsors · Deal"
         title={sponsor.company}
         lede={
-          [sponsor.contactName, sponsor.contactRole].filter(Boolean).join(" · ") ||
+          [
+            sponsor.contactFirstName
+              ? fullName({
+                  firstName: sponsor.contactFirstName,
+                  lastName: sponsor.contactLastName,
+                })
+              : null,
+            sponsor.contactRole,
+          ]
+            .filter(Boolean)
+            .join(" · ") ||
           undefined
         }
         actions={

@@ -10,12 +10,16 @@ import {
   Panel,
 } from "@/components/ui";
 import { db } from "@/lib/db";
-import { formatDate, formatMoney, relativeDays } from "@/lib/format";
+import { formatDate, formatMoney, fullName, relativeDays } from "@/lib/format";
 import { TICKET_STATUS } from "@/lib/taxonomy";
 import { deleteOrder, setOrderStatus, updateOrder } from "../actions";
 import { OrderForm } from "../order-form";
 
 export const dynamic = "force-dynamic";
+
+/** "First Last" for a ticket order's buyer fields. */
+const buyerName = (o: { buyerFirstName: string; buyerLastName: string }) =>
+  fullName({ firstName: o.buyerFirstName, lastName: o.buyerLastName });
 
 export default async function OrderPage({
   params,
@@ -41,7 +45,7 @@ export default async function OrderPage({
     const update = updateOrder.bind(null, order.id);
     return (
       <>
-        <PageHeader eyebrow="Ticket Buyers · Order" title={`Edit ${order.buyerName}`} />
+        <PageHeader eyebrow="Ticket Buyers · Order" title={`Edit ${buyerName(order)}`} />
         <OrderForm
           order={order}
           events={events}
@@ -59,7 +63,7 @@ export default async function OrderPage({
     <>
       <PageHeader
         eyebrow="Ticket Buyers · Order"
-        title={order.buyerName}
+        title={buyerName(order)}
         lede={`${order.quantity} × ${order.ticketType} — ${order.event.name}`}
         actions={
           <>
@@ -75,7 +79,7 @@ export default async function OrderPage({
             </Link>
             <DeleteButton
               action={del}
-              confirmText={`Delete ${order.buyerName}'s order? Prefer marking it Refunded if the money moved.`}
+              confirmText={`Delete ${buyerName(order)}'s order? Prefer marking it Refunded if the money moved.`}
             />
           </>
         }

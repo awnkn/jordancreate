@@ -11,7 +11,7 @@ import {
   StatRow,
 } from "@/components/ui";
 import { db } from "@/lib/db";
-import { formatCount, formatDate } from "@/lib/format";
+import { formatCount, formatDate, fullName } from "@/lib/format";
 import { GUEST_STATUS } from "@/lib/taxonomy";
 
 /** Pipeline order, so the table reads top-to-bottom through the funnel. */
@@ -47,7 +47,8 @@ export async function GuestList({
         ...(q
           ? {
               OR: [
-                { name: { contains: q } },
+                { firstName: { contains: q } },
+                { lastName: { contains: q } },
                 { outlet: { contains: q } },
                 { showName: { contains: q } },
                 { angle: { contains: q } },
@@ -172,7 +173,7 @@ export async function GuestList({
                   <tr key={g.id}>
                     <td className="max-w-[220px]">
                       <RowLink href={`/public-relations/guests/${g.id}`}>
-                        {g.name}
+                        {fullName(g)}
                       </RowLink>
                       {g.angle ? (
                         <div className="mt-0.5 truncate text-[12px] text-ink-3">

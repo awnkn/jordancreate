@@ -13,7 +13,7 @@ import {
   StatRow,
 } from "@/components/ui";
 import { db } from "@/lib/db";
-import { formatDate } from "@/lib/format";
+import { formatDate, fullName } from "@/lib/format";
 import {
   CONTENT_STATUS,
   GUEST_STATUS,
@@ -35,9 +35,9 @@ export default async function TopicPage({
   const topic = await db.topic.findUnique({
     where: { id },
     include: {
-      speakers: { orderBy: { name: "asc" } },
+      speakers: { orderBy: [{ firstName: "asc" }, { lastName: "asc" }] },
       content: { orderBy: { publishDate: "desc" } },
-      guests: { orderBy: { name: "asc" } },
+      guests: { orderBy: [{ firstName: "asc" }, { lastName: "asc" }] },
     },
   });
 
@@ -109,7 +109,7 @@ export default async function TopicPage({
               <ul className="divide-y divide-rule">
                 {topic.speakers.map((s) => (
                   <li key={s.id} className="px-5 py-3">
-                    <RowLink href={`/experience/speakers/${s.id}`}>{s.name}</RowLink>
+                    <RowLink href={`/experience/speakers/${s.id}`}>{fullName(s)}</RowLink>
                     <div className="mt-1">
                       <Badge value={s.status} vocab={SPEAKER_STATUS} />
                     </div>
@@ -147,7 +147,7 @@ export default async function TopicPage({
               <ul className="divide-y divide-rule">
                 {topic.guests.map((g) => (
                   <li key={g.id} className="px-5 py-3">
-                    <RowLink href={`/public-relations/guests/${g.id}`}>{g.name}</RowLink>
+                    <RowLink href={`/public-relations/guests/${g.id}`}>{fullName(g)}</RowLink>
                     <div className="mt-1">
                       <Badge value={g.status} vocab={GUEST_STATUS} />
                     </div>

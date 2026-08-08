@@ -32,12 +32,21 @@ export function GuestForm({
     <form action={action}>
       <Panel className="p-5 sm:p-6">
         <FormGrid>
-          <Field label="Contact name" span={2}>
+          <Field label="First name">
             <Input
-              name="name"
+              name="firstName"
               required
-              defaultValue={guest?.name ?? ""}
-              placeholder="Alina Petrov"
+              defaultValue={guest?.firstName ?? ""}
+              placeholder="Alina"
+            />
+          </Field>
+
+          <Field label="Last name">
+            <Input
+              name="lastName"
+              required
+              defaultValue={guest?.lastName ?? ""}
+              placeholder="Petrov"
             />
           </Field>
 

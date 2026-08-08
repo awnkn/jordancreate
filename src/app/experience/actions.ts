@@ -58,7 +58,8 @@ export async function deleteEvent(id: string) {
 
 function speakerData(form: FormData) {
   return {
-    name: (nullify(form.get("name")) ?? "Unnamed speaker") as string,
+    firstName: (nullify(form.get("firstName")) ?? "Unnamed") as string,
+    lastName: (nullify(form.get("lastName")) ?? "") as string,
     role: nullify(form.get("role")),
     company: nullify(form.get("company")),
     email: nullify(form.get("email")),

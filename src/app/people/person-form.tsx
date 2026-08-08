@@ -20,12 +20,21 @@ export function PersonForm({
     <form action={action}>
       <Panel className="p-5 sm:p-6">
         <FormGrid>
-          <Field label="Name" span={2}>
+          <Field label="First name">
             <Input
-              name="name"
+              name="firstName"
               required
-              defaultValue={person?.name ?? ""}
-              placeholder="Priya Sharma"
+              defaultValue={person?.firstName ?? ""}
+              placeholder="Priya"
+            />
+          </Field>
+
+          <Field label="Last name">
+            <Input
+              name="lastName"
+              required
+              defaultValue={person?.lastName ?? ""}
+              placeholder="Sharma"
             />
           </Field>
 

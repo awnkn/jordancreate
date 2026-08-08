@@ -13,7 +13,7 @@ import {
 } from "@/components/ui";
 import { deleteInteraction } from "@/app/experience/actions";
 import { db } from "@/lib/db";
-import { formatCount, formatDate, relativeDays } from "@/lib/format";
+import { formatCount, formatDate, fullName, relativeDays } from "@/lib/format";
 import { GUEST_STATUS, categorySlug } from "@/lib/taxonomy";
 import {
   deleteGuest,
@@ -52,7 +52,7 @@ export default async function GuestPage({
     const update = updateGuest.bind(null, guest.id);
     return (
       <>
-        <PageHeader eyebrow="Public Relations · Guest" title={`Edit ${guest.name}`} />
+        <PageHeader eyebrow="Public Relations · Guest" title={`Edit ${fullName(guest)}`} />
         <GuestForm
           guest={guest}
           topics={topics}
@@ -72,7 +72,7 @@ export default async function GuestPage({
     <>
       <PageHeader
         eyebrow="Public Relations · Guest"
-        title={guest.name}
+        title={fullName(guest)}
         lede={[guest.outlet, guest.showName].filter(Boolean).join(" · ") || undefined}
         actions={
           <>
@@ -81,7 +81,7 @@ export default async function GuestPage({
             </Link>
             <DeleteButton
               action={del}
-              confirmText={`Delete ${guest.name}? Their contact history goes too.`}
+              confirmText={`Delete ${fullName(guest)}? Their contact history goes too.`}
             />
           </>
         }

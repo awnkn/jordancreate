@@ -15,7 +15,7 @@ import {
   StatRow,
 } from "@/components/ui";
 import { db } from "@/lib/db";
-import { dateInputValue, formatMoney, formatRange, relativeDays } from "@/lib/format";
+import { dateInputValue, formatMoney, formatRange, fullName, relativeDays } from "@/lib/format";
 import { BOOKING_STATUS, EVENT_STATUS } from "@/lib/taxonomy";
 import { createBooking, deleteBooking, deleteEvent, updateEvent } from "../actions";
 import { EventForm } from "../event-form";
@@ -35,13 +35,16 @@ export default async function EventPage({
       include: {
         project: { select: { id: true, name: true } },
         bookings: {
-          include: { speaker: { select: { id: true, name: true, company: true, status: true } } },
+          include: { speaker: { select: { id: true, firstName: true, lastName: true, company: true, status: true } } },
           orderBy: [{ startTime: "asc" }],
         },
       },
     }),
     db.project.findMany({ select: { id: true, name: true }, orderBy: { name: "asc" } }),
-    db.speaker.findMany({ select: { id: true, name: true }, orderBy: { name: "asc" } }),
+    db.speaker.findMany({
+      select: { id: true, firstName: true, lastName: true },
+      orderBy: [{ firstName: "asc" }, { lastName: "asc" }],
+    }),
   ]);
 
   if (!event) notFound();
@@ -158,7 +161,7 @@ export default async function EventPage({
                   <select name="speakerId" className="select" required>
                     {available.map((s) => (
                       <option key={s.id} value={s.id}>
-                        {s.name}
+                        {fullName(s)}
                       </option>
                     ))}
                   </select>
@@ -212,7 +215,7 @@ export default async function EventPage({
                       <tr key={b.id}>
                         <td>
                           <RowLink href={`/experience/speakers/${b.speaker.id}`}>
-                            {b.speaker.name}
+                            {fullName(b.speaker)}
                           </RowLink>
                           {/* Deliberately no speaker-status badge here — the
                               Booking column already says "Confirmed", and two

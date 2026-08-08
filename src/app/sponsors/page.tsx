@@ -12,7 +12,7 @@ import {
   StatRow,
 } from "@/components/ui";
 import { db } from "@/lib/db";
-import { daysFromToday, formatDate, formatMoney } from "@/lib/format";
+import { daysFromToday, formatDate, formatMoney, fullName } from "@/lib/format";
 import { CLOSED_STATUSES, SPONSOR_STATUS } from "@/lib/taxonomy";
 
 export const dynamic = "force-dynamic";
@@ -32,7 +32,8 @@ export default async function SponsorsPage({
           ? {
               OR: [
                 { company: { contains: q } },
-                { contactName: { contains: q } },
+                { contactFirstName: { contains: q } },
+                { contactLastName: { contains: q } },
                 { nextStep: { contains: q } },
               ],
             }
@@ -138,9 +139,9 @@ export default async function SponsorsPage({
                   <tr key={s.id}>
                     <td className="max-w-[220px]">
                       <RowLink href={`/sponsors/${s.id}`}>{s.company}</RowLink>
-                      {s.contactName ? (
+                      {s.contactFirstName ? (
                         <div className="mt-0.5 text-[12px] text-ink-3">
-                          {s.contactName}
+                          {fullName({ firstName: s.contactFirstName, lastName: s.contactLastName })}
                           {s.contactRole ? ` · ${s.contactRole}` : ""}
                         </div>
                       ) : null}

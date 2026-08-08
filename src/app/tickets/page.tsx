@@ -11,11 +11,15 @@ import {
   StatRow,
 } from "@/components/ui";
 import { db } from "@/lib/db";
-import { formatDate, formatMoney } from "@/lib/format";
+import { formatDate, formatMoney, fullName } from "@/lib/format";
 import { TICKET_STATUS } from "@/lib/taxonomy";
 import { setOrderStatus } from "./actions";
 
 export const dynamic = "force-dynamic";
+
+/** "First Last" for a ticket order's buyer fields. */
+const buyerName = (o: { buyerFirstName: string; buyerLastName: string }) =>
+  fullName({ firstName: o.buyerFirstName, lastName: o.buyerLastName });
 
 export default async function TicketsPage({
   searchParams,
@@ -31,7 +35,13 @@ export default async function TicketsPage({
         ...(status ? { status } : {}),
         ...(eventId ? { eventId } : {}),
         ...(q
-          ? { OR: [{ buyerName: { contains: q } }, { email: { contains: q } }] }
+          ? {
+              OR: [
+                { buyerFirstName: { contains: q } },
+                { buyerLastName: { contains: q } },
+                { email: { contains: q } },
+              ],
+            }
           : {}),
       },
       include: { event: { select: { id: true, name: true } } },
@@ -151,7 +161,7 @@ export default async function TicketsPage({
                   return (
                     <tr key={o.id}>
                       <td className="max-w-[220px]">
-                        <RowLink href={`/tickets/${o.id}`}>{o.buyerName}</RowLink>
+                        <RowLink href={`/tickets/${o.id}`}>{buyerName(o)}</RowLink>
                         {o.email ? (
                           <div className="mt-0.5 truncate text-[12px] text-ink-3">
                             {o.email}

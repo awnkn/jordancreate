@@ -71,6 +71,14 @@ export function relativeDays(value: Date | string | null | undefined): string {
   return `${Math.abs(n)} days ago`;
 }
 
+/** "First Last" from structured name fields; tolerates a legacy empty last name. */
+export function fullName(p: {
+  firstName: string;
+  lastName?: string | null;
+}): string {
+  return [p.firstName, p.lastName].filter(Boolean).join(" ");
+}
+
 /** Convert an empty form field to null so we don't store "" everywhere. */
 export function nullify(value: FormDataEntryValue | null): string | null {
   if (typeof value !== "string") return null;

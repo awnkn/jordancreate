@@ -9,6 +9,7 @@ import {
   RowLink,
 } from "@/components/ui";
 import { db } from "@/lib/db";
+import { fullName } from "@/lib/format";
 import { SPEAKER_STATUS } from "@/lib/taxonomy";
 
 export const dynamic = "force-dynamic";
@@ -27,7 +28,8 @@ export default async function SpeakersPage({
         ...(q
           ? {
               OR: [
-                { name: { contains: q } },
+                { firstName: { contains: q } },
+                { lastName: { contains: q } },
                 { company: { contains: q } },
                 { role: { contains: q } },
                 { location: { contains: q } },
@@ -39,7 +41,7 @@ export default async function SpeakersPage({
         topics: { select: { id: true, name: true } },
         _count: { select: { bookings: true } },
       },
-      orderBy: { name: "asc" },
+      orderBy: [{ firstName: "asc" }, { lastName: "asc" }],
     }),
     db.speaker.groupBy({ by: ["status"], _count: true }),
   ]);
@@ -114,7 +116,7 @@ export default async function SpeakersPage({
                   <tr key={s.id}>
                     <td className="max-w-[260px]">
                       <RowLink href={`/experience/speakers/${s.id}`}>
-                        {s.name}
+                        {fullName(s)}
                       </RowLink>
                       <div className="mt-0.5 text-[12px] text-ink-3">
                         {[s.role, s.company].filter(Boolean).join(" · ") || "—"}

@@ -31,12 +31,21 @@ export function SpeakerForm({
     <form action={action}>
       <Panel className="p-5 sm:p-6">
         <FormGrid>
-          <Field label="Name" span={2}>
+          <Field label="First name">
             <Input
-              name="name"
+              name="firstName"
               required
-              defaultValue={speaker?.name ?? ""}
-              placeholder="Maya Okonkwo"
+              defaultValue={speaker?.firstName ?? ""}
+              placeholder="Maya"
+            />
+          </Field>
+
+          <Field label="Last name">
+            <Input
+              name="lastName"
+              required
+              defaultValue={speaker?.lastName ?? ""}
+              placeholder="Okonkwo"
             />
           </Field>
 

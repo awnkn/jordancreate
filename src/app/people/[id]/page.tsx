@@ -11,7 +11,7 @@ import {
   Panel,
 } from "@/components/ui";
 import { db } from "@/lib/db";
-import { dateInputValue, formatDate, relativeDays } from "@/lib/format";
+import { dateInputValue, formatDate, fullName, relativeDays } from "@/lib/format";
 import {
   ACCESS_LEVEL,
   ACCESS_STATUS,
@@ -46,7 +46,7 @@ export default async function PersonPage({
     const update = updatePerson.bind(null, person.id);
     return (
       <>
-        <PageHeader eyebrow="People" title={`Edit ${person.name}`} />
+        <PageHeader eyebrow="People" title={`Edit ${fullName(person)}`} />
         <PersonForm
           person={person}
           action={update}
@@ -64,7 +64,7 @@ export default async function PersonPage({
     <>
       <PageHeader
         eyebrow="People"
-        title={person.name}
+        title={fullName(person)}
         lede={person.role ?? undefined}
         actions={
           <>
@@ -73,7 +73,7 @@ export default async function PersonPage({
             </Link>
             <DeleteButton
               action={del}
-              confirmText={`Remove ${person.name}? Their ${person.access.length} access grant(s) go too.`}
+              confirmText={`Remove ${fullName(person)}? Their ${person.access.length} access grant(s) go too.`}
             />
           </>
         }

@@ -62,7 +62,7 @@ export async function seedAll(db: PrismaClient) {
       name: "Create Summit 2026",
       client: "Jordan Create",
       status: "Active",
-      owner: "Jordan",
+      owner: "Jordan Avery",
       summary: "The flagship two-day gathering. Programming, production, and the content engine around it.",
       startDate: day(-70),
       dueDate: day(58),
@@ -75,7 +75,7 @@ export async function seedAll(db: PrismaClient) {
       name: "Northwind Rebrand",
       client: "Northwind Coffee",
       status: "Active",
-      owner: "Priya",
+      owner: "Priya Sharma",
       summary: "Full identity system, packaging, and rollout guidelines for 40 storefronts.",
       startDate: day(-35),
       dueDate: day(26),
@@ -88,7 +88,7 @@ export async function seedAll(db: PrismaClient) {
       name: "Studio Brand Refresh",
       client: "Jordan Create",
       status: "Discovery",
-      owner: "Jordan",
+      owner: "Jordan Avery",
       summary: "Our own identity is three years old and no longer matches the work.",
       startDate: day(-8),
       dueDate: day(92),
@@ -101,7 +101,7 @@ export async function seedAll(db: PrismaClient) {
       name: "Atlas Field Guide",
       client: "Atlas Outdoors",
       status: "Delivered",
-      owner: "Marcus",
+      owner: "Marcus Webb",
       summary: "128-page print guide plus a companion microsite.",
       startDate: day(-160),
       dueDate: day(-24),
@@ -114,7 +114,7 @@ export async function seedAll(db: PrismaClient) {
       name: "Meridian Launch Film",
       client: "Meridian Health",
       status: "Blocked",
-      owner: "Priya",
+      owner: "Priya Sharma",
       summary: "Waiting on legal sign-off for the clinical claims in the voiceover.",
       startDate: day(-42),
       dueDate: day(12),
@@ -125,56 +125,56 @@ export async function seedAll(db: PrismaClient) {
   // ------------------------------------------------------------------- Tasks
   await db.task.createMany({
     data: [
-      { title: "Lock the main-stage running order", status: "Doing", priority: "Urgent", assignee: "Jordan", dueDate: day(4), projectId: summit.id },
-      { title: "Send speaker travel briefs", status: "Todo", priority: "High", assignee: "Sam", dueDate: day(9), projectId: summit.id },
-      { title: "Confirm AV vendor contract", status: "Blocked", priority: "High", assignee: "Sam", dueDate: day(2), notes: "Vendor has not returned the redlined contract.", projectId: summit.id },
-      { title: "Design the stage backdrop", status: "Todo", priority: "Medium", assignee: "Marcus", dueDate: day(21), projectId: summit.id },
-      { title: "Ticket page copy pass", status: "Done", priority: "Medium", assignee: "Priya", dueDate: day(-6), projectId: summit.id },
-      { title: "Packaging dielines v3", status: "Doing", priority: "High", assignee: "Marcus", dueDate: day(5), projectId: rebrand.id },
-      { title: "Present logo routes to client", status: "Done", priority: "Urgent", assignee: "Priya", dueDate: day(-11), projectId: rebrand.id },
-      { title: "Store signage audit", status: "Todo", priority: "Low", assignee: "Marcus", dueDate: day(18), projectId: rebrand.id },
-      { title: "Competitive audit for our own positioning", status: "Doing", priority: "Medium", assignee: "Jordan", dueDate: day(14), projectId: studioBrand.id },
-      { title: "Archive Atlas project files", status: "Todo", priority: "Low", assignee: "Sam", dueDate: day(7), projectId: atlas.id },
-      { title: "Q3 freelancer rate review", status: "Todo", priority: "Medium", assignee: "Jordan", dueDate: day(30) },
-      { title: "Renew studio insurance", status: "Todo", priority: "High", assignee: "Sam", dueDate: day(-3) },
+      { title: "Lock the main-stage running order", status: "Doing", priority: "Urgent", assignee: "Jordan Avery", dueDate: day(4), projectId: summit.id },
+      { title: "Send speaker travel briefs", status: "Todo", priority: "High", assignee: "Sam Rivera", dueDate: day(9), projectId: summit.id },
+      { title: "Confirm AV vendor contract", status: "Blocked", priority: "High", assignee: "Sam Rivera", dueDate: day(2), notes: "Vendor has not returned the redlined contract.", projectId: summit.id },
+      { title: "Design the stage backdrop", status: "Todo", priority: "Medium", assignee: "Marcus Webb", dueDate: day(21), projectId: summit.id },
+      { title: "Ticket page copy pass", status: "Done", priority: "Medium", assignee: "Priya Sharma", dueDate: day(-6), projectId: summit.id },
+      { title: "Packaging dielines v3", status: "Doing", priority: "High", assignee: "Marcus Webb", dueDate: day(5), projectId: rebrand.id },
+      { title: "Present logo routes to client", status: "Done", priority: "Urgent", assignee: "Priya Sharma", dueDate: day(-11), projectId: rebrand.id },
+      { title: "Store signage audit", status: "Todo", priority: "Low", assignee: "Marcus Webb", dueDate: day(18), projectId: rebrand.id },
+      { title: "Competitive audit for our own positioning", status: "Doing", priority: "Medium", assignee: "Jordan Avery", dueDate: day(14), projectId: studioBrand.id },
+      { title: "Archive Atlas project files", status: "Todo", priority: "Low", assignee: "Sam Rivera", dueDate: day(7), projectId: atlas.id },
+      { title: "Q3 freelancer rate review", status: "Todo", priority: "Medium", assignee: "Jordan Avery", dueDate: day(30) },
+      { title: "Renew studio insurance", status: "Todo", priority: "High", assignee: "Sam Rivera", dueDate: day(-3) },
     ],
   });
 
   // ---------------------------------------------------------------- Speakers
   const speakerSeed = [
     {
-      data: { name: "Maya Okonkwo", role: "Founder & Creative Director", company: "Field Studio", email: "maya@fieldstudio.co", location: "Lagos, NG", status: "Confirmed", fee: "$12k–15k", website: "https://fieldstudio.co", bio: "Built Field Studio from a two-person shop into a 30-person practice without taking outside money." },
+      data: { firstName: "Maya", lastName: "Okonkwo", role: "Founder & Creative Director", company: "Field Studio", email: "maya@fieldstudio.co", location: "Lagos, NG", status: "Confirmed", fee: "$12k–15k", website: "https://fieldstudio.co", bio: "Built Field Studio from a two-person shop into a 30-person practice without taking outside money." },
       topics: ["Creative Direction", "Building a Studio"],
     },
     {
-      data: { name: "Daniel Ruiz", role: "Head of Design", company: "Loop", email: "d.ruiz@loop.io", location: "Mexico City, MX", status: "Confirmed", fee: "$8k–10k", bio: "Runs design at a 400-person product company and writes about design systems at scale." },
+      data: { firstName: "Daniel", lastName: "Ruiz", role: "Head of Design", company: "Loop", email: "d.ruiz@loop.io", location: "Mexico City, MX", status: "Confirmed", fee: "$8k–10k", bio: "Runs design at a 400-person product company and writes about design systems at scale." },
       topics: ["Brand Systems", "AI in the Studio"],
     },
     {
-      data: { name: "Ingrid Halvorsen", role: "Independent Consultant", company: "—", email: "ingrid@halvorsen.no", location: "Oslo, NO", status: "Invited", fee: "$6k", bio: "Twenty years in packaging design, now advising food and beverage founders." },
+      data: { firstName: "Ingrid", lastName: "Halvorsen", role: "Independent Consultant", company: "—", email: "ingrid@halvorsen.no", location: "Oslo, NO", status: "Invited", fee: "$6k", bio: "Twenty years in packaging design, now advising food and beverage founders." },
       topics: ["Brand Systems", "Creative Direction"],
     },
     {
-      data: { name: "Tobi Adeyemi", role: "Creative Technologist", company: "Nine Volt", email: "tobi@ninevolt.dev", location: "London, UK", status: "Invited", fee: "$5k–7k", bio: "Builds the weird internal tools that creative teams end up depending on." },
+      data: { firstName: "Tobi", lastName: "Adeyemi", role: "Creative Technologist", company: "Nine Volt", email: "tobi@ninevolt.dev", location: "London, UK", status: "Invited", fee: "$5k–7k", bio: "Builds the weird internal tools that creative teams end up depending on." },
       topics: ["AI in the Studio", "Community as Product"],
     },
     {
-      data: { name: "Renata Silva", role: "Executive Coach", company: "Still Water", email: "renata@stillwater.co", location: "São Paulo, BR", status: "Prospect", fee: "TBD", bio: "Works with creative leaders on the parts of the job nobody trained them for." },
+      data: { firstName: "Renata", lastName: "Silva", role: "Executive Coach", company: "Still Water", email: "renata@stillwater.co", location: "São Paulo, BR", status: "Prospect", fee: "TBD", bio: "Works with creative leaders on the parts of the job nobody trained them for." },
       topics: ["Creative Burnout"],
     },
     {
-      data: { name: "Anders Vik", role: "Partner", company: "Vik & Sons", email: "anders@vikandsons.se", location: "Stockholm, SE", status: "Declined", fee: "$9k", bio: "Declined for 2026 — on sabbatical until the autumn." },
+      data: { firstName: "Anders", lastName: "Vik", role: "Partner", company: "Vik & Sons", email: "anders@vikandsons.se", location: "Stockholm, SE", status: "Declined", fee: "$9k", bio: "Declined for 2026 — on sabbatical until the autumn." },
       topics: ["Building a Studio"],
     },
     {
-      data: { name: "Chiara Bellini", role: "Editor-in-Chief", company: "Format Magazine", email: "chiara@formatmag.it", location: "Milan, IT", status: "Alumni", fee: "$4k", bio: "Spoke at the 2025 summit on independent publishing. Consistently the top-rated session." },
+      data: { firstName: "Chiara", lastName: "Bellini", role: "Editor-in-Chief", company: "Format Magazine", email: "chiara@formatmag.it", location: "Milan, IT", status: "Alumni", fee: "$4k", bio: "Spoke at the 2025 summit on independent publishing. Consistently the top-rated session." },
       topics: ["Community as Product", "Creative Direction"],
     },
   ];
 
   const speakers: Record<string, { id: string }> = {};
   for (const s of speakerSeed) {
-    speakers[s.data.name] = await db.speaker.create({
+    speakers[`${s.data.firstName} ${s.data.lastName}`] = await db.speaker.create({
       data: {
         ...s.data,
         topics: { connect: [...new Set(s.topics)].map((t) => ({ id: topics[t].id })) },
@@ -263,55 +263,55 @@ export async function seedAll(db: PrismaClient) {
   // ------------------------------------------------------------------ Guests
   const guestSeed = [
     {
-      data: { name: "Alina Petrov", category: "Creators", outlet: "Overlap", showName: "The Overlap Podcast", format: "Podcast", status: "Booked", email: "alina@overlap.fm", audienceSize: 42000, scheduledFor: day(11), angle: "Why the studio stopped taking retainer work." },
+      data: { firstName: "Alina", lastName: "Petrov", category: "Creators", outlet: "Overlap", showName: "The Overlap Podcast", format: "Podcast", status: "Booked", email: "alina@overlap.fm", audienceSize: 42000, scheduledFor: day(11), angle: "Why the studio stopped taking retainer work." },
       topics: ["Building a Studio"],
     },
     {
-      data: { name: "Desmond Clarke", category: "General Guests", outlet: "Fast Company", format: "Press", status: "Pitched", email: "dclarke@fastcompany.com", audienceSize: 900000, angle: "The Create Summit as a case study in owned audience." },
+      data: { firstName: "Desmond", lastName: "Clarke", category: "General Guests", outlet: "Fast Company", format: "Press", status: "Pitched", email: "dclarke@fastcompany.com", audienceSize: 900000, angle: "The Create Summit as a case study in owned audience." },
       topics: ["Community as Product", "Brand Systems"],
     },
     {
-      data: { name: "Hana Yamamoto", category: "Designers", outlet: "Design Matters", showName: "Design Matters Live", format: "Livestream", status: "Recorded", email: "hana@designmatters.tv", audienceSize: 78000, scheduledFor: day(-9), angle: "Creative direction when the client has no taste." },
+      data: { firstName: "Hana", lastName: "Yamamoto", category: "Designers", outlet: "Design Matters", showName: "Design Matters Live", format: "Livestream", status: "Recorded", email: "hana@designmatters.tv", audienceSize: 78000, scheduledFor: day(-9), angle: "Creative direction when the client has no taste." },
       topics: ["Creative Direction"],
     },
     {
-      data: { name: "Owen Brady", category: "Creators", outlet: "The Grain", showName: "Grain Weekly", format: "Newsletter", status: "Published", email: "owen@thegrain.co", audienceSize: 31000, scheduledFor: day(-27), publishedUrl: "https://thegrain.co/issues/jordan-create", angle: "Studio economics, plainly explained." },
+      data: { firstName: "Owen", lastName: "Brady", category: "Creators", outlet: "The Grain", showName: "Grain Weekly", format: "Newsletter", status: "Published", email: "owen@thegrain.co", audienceSize: 31000, scheduledFor: day(-27), publishedUrl: "https://thegrain.co/issues/jordan-create", angle: "Studio economics, plainly explained." },
       topics: ["Building a Studio"],
     },
     {
-      data: { name: "Priyanka Rao", category: "General Guests", outlet: "SXSW", format: "Panel", status: "Prospect", email: "programming@sxsw.com", audienceSize: 1200, angle: "Panel on AI and creative labour — worth doing only if we pick the other panelists." },
+      data: { firstName: "Priyanka", lastName: "Rao", category: "General Guests", outlet: "SXSW", format: "Panel", status: "Prospect", email: "programming@sxsw.com", audienceSize: 1200, angle: "Panel on AI and creative labour — worth doing only if we pick the other panelists." },
       topics: ["AI in the Studio"],
     },
     {
-      data: { name: "Marcus Lowe", category: "Designers", outlet: "Creative Review", format: "Press", status: "Passed", email: "m.lowe@creativereview.co.uk", audienceSize: 210000, angle: "Passed — wanted an exclusive on the rebrand before it ships." },
+      data: { firstName: "Marcus", lastName: "Lowe", category: "Designers", outlet: "Creative Review", format: "Press", status: "Passed", email: "m.lowe@creativereview.co.uk", audienceSize: 210000, angle: "Passed — wanted an exclusive on the rebrand before it ships." },
       topics: ["Brand Systems"],
     },
     {
-      data: { name: "Nadia Rahman", category: "Executives", outlet: "Harbour Group", showName: "The Long Game", format: "Podcast", status: "Pitched", email: "n.rahman@harbourgroup.com", audienceSize: 26000, angle: "What a 40-store retailer looks for when it hires a studio." },
+      data: { firstName: "Nadia", lastName: "Rahman", category: "Executives", outlet: "Harbour Group", showName: "The Long Game", format: "Podcast", status: "Pitched", email: "n.rahman@harbourgroup.com", audienceSize: 26000, angle: "What a 40-store retailer looks for when it hires a studio." },
       topics: ["Brand Systems", "Building a Studio"],
     },
     {
-      data: { name: "Eleanor Voss", category: "Executives", outlet: "Bloomberg", format: "Broadcast", status: "Prospect", email: "evoss@bloomberg.net", audienceSize: 1400000, angle: "Creative services as a leading indicator — probably a stretch, but worth one call." },
+      data: { firstName: "Eleanor", lastName: "Voss", category: "Executives", outlet: "Bloomberg", format: "Broadcast", status: "Prospect", email: "evoss@bloomberg.net", audienceSize: 1400000, angle: "Creative services as a leading indicator — probably a stretch, but worth one call." },
       topics: ["Building a Studio"],
     },
     {
-      data: { name: "Councillor Dale Ferris", category: "Government", outlet: "Brooklyn Arts Commission", format: "Panel", status: "Booked", email: "d.ferris@brooklynarts.gov", audienceSize: 300, scheduledFor: day(23), angle: "Public funding for design education — we bring the studio's apprenticeship data." },
+      data: { firstName: "Dale", lastName: "Ferris", category: "Government", outlet: "Brooklyn Arts Commission", format: "Panel", status: "Booked", email: "d.ferris@brooklynarts.gov", audienceSize: 300, scheduledFor: day(23), angle: "Public funding for design education — we bring the studio's apprenticeship data." },
       topics: ["Community as Product"],
     },
     {
-      data: { name: "Sofia Marchetti", category: "Government", outlet: "EU Design Council", format: "Press", status: "Prospect", email: "s.marchetti@eudesign.eu", audienceSize: 12000, angle: "Standards work. Slow, unglamorous, and the kind of thing that compounds." },
+      data: { firstName: "Sofia", lastName: "Marchetti", category: "Government", outlet: "EU Design Council", format: "Press", status: "Prospect", email: "s.marchetti@eudesign.eu", audienceSize: 12000, angle: "Standards work. Slow, unglamorous, and the kind of thing that compounds." },
       topics: ["Brand Systems"],
     },
     {
-      data: { name: "Yuki Tanaka", category: "Artists", outlet: "Studio Tanaka", showName: "Making It", format: "Livestream", status: "Recorded", email: "yuki@studiotanaka.jp", audienceSize: 54000, scheduledFor: day(-14), angle: "Installation work and commercial work, and why she refuses to separate them." },
+      data: { firstName: "Yuki", lastName: "Tanaka", category: "Artists", outlet: "Studio Tanaka", showName: "Making It", format: "Livestream", status: "Recorded", email: "yuki@studiotanaka.jp", audienceSize: 54000, scheduledFor: day(-14), angle: "Installation work and commercial work, and why she refuses to separate them." },
       topics: ["Creative Direction", "Creative Burnout"],
     },
     {
-      data: { name: "Ade Bello", category: "Artists", outlet: "Frieze", format: "Press", status: "Passed", email: "abello@frieze.com", audienceSize: 180000, angle: "Passed — the piece needed an exhibition to hang on and we don't have one." },
+      data: { firstName: "Ade", lastName: "Bello", category: "Artists", outlet: "Frieze", format: "Press", status: "Passed", email: "abello@frieze.com", audienceSize: 180000, angle: "Passed — the piece needed an exhibition to hang on and we don't have one." },
       topics: ["Creative Direction"],
     },
     {
-      data: { name: "Lena Fischer", category: "Designers", outlet: "Type Directors Club", format: "Panel", status: "Booked", email: "lena@tdc.org", audienceSize: 900, scheduledFor: day(31), angle: "Typography in identity systems that non-designers have to maintain." },
+      data: { firstName: "Lena", lastName: "Fischer", category: "Designers", outlet: "Type Directors Club", format: "Panel", status: "Booked", email: "lena@tdc.org", audienceSize: 900, scheduledFor: day(31), angle: "Typography in identity systems that non-designers have to maintain." },
       topics: ["Brand Systems", "Creative Direction"],
     },
   ];
@@ -332,7 +332,7 @@ export async function seedAll(db: PrismaClient) {
       format: "Article",
       channel: "Studio journal",
       status: "Drafting",
-      owner: "Jordan",
+      owner: "Jordan Avery",
       brief: "A full P&L breakdown of the 2025 summit, published openly.",
       publishDate: day(13),
       projectId: summit.id,
@@ -346,7 +346,7 @@ export async function seedAll(db: PrismaClient) {
       format: "Case Study",
       channel: "Website",
       status: "Idea",
-      owner: "Priya",
+      owner: "Priya Sharma",
       brief: "Ship two weeks after the rollout completes, with in-store photography.",
       publishDate: day(45),
       projectId: rebrand.id,
@@ -360,7 +360,7 @@ export async function seedAll(db: PrismaClient) {
       format: "Newsletter",
       channel: "Email",
       status: "Scheduled",
-      owner: "Tobi",
+      owner: "Tobi Adeyemi",
       brief: "Honest inventory of the AI tooling that survived a year in production.",
       publishDate: day(6),
       topics: { connect: [{ id: topics["AI in the Studio"].id }] },
@@ -373,7 +373,7 @@ export async function seedAll(db: PrismaClient) {
       format: "Social",
       channel: "Instagram",
       status: "Review",
-      owner: "Sam",
+      owner: "Sam Rivera",
       brief: "Six-card carousel. Blocked until Ingrid countersigns.",
       publishDate: day(3),
       projectId: summit.id,
@@ -387,7 +387,7 @@ export async function seedAll(db: PrismaClient) {
       format: "Video",
       channel: "YouTube",
       status: "Published",
-      owner: "Marcus",
+      owner: "Marcus Webb",
       brief: "Nine-minute press-check documentary.",
       url: "https://youtube.com/watch?v=example",
       publishDate: day(-18),
@@ -402,7 +402,7 @@ export async function seedAll(db: PrismaClient) {
       format: "Article",
       channel: "Studio journal",
       status: "Idea",
-      owner: "Jordan",
+      owner: "Jordan Avery",
       brief: "Pairs with Renata's session if she confirms.",
       topics: { connect: [{ id: topics["Creative Burnout"].id }] },
     },
@@ -419,8 +419,8 @@ export async function seedAll(db: PrismaClient) {
     ],
   });
 
-  const alina = await db.guest.findFirst({ where: { name: "Alina Petrov" } });
-  const desmond = await db.guest.findFirst({ where: { name: "Desmond Clarke" } });
+  const alina = await db.guest.findFirst({ where: { firstName: "Alina", lastName: "Petrov" } });
+  const desmond = await db.guest.findFirst({ where: { firstName: "Desmond", lastName: "Clarke" } });
   if (alina && desmond) {
     await db.interaction.createMany({
       data: [
@@ -434,17 +434,17 @@ export async function seedAll(db: PrismaClient) {
 
   // ------------------------------------------------------------------ People
   const peopleSeed = [
-    { name: "Jordan Avery", role: "Founder & Creative Director", status: "Core Team", email: "jordan@jordancreate.co", location: "Brooklyn, NY", startDate: day(-1100) },
-    { name: "Priya Sharma", role: "Design Director", status: "Core Team", email: "priya@jordancreate.co", location: "Brooklyn, NY", startDate: day(-760) },
-    { name: "Marcus Webb", role: "Senior Designer", status: "Core Team", email: "marcus@jordancreate.co", location: "Philadelphia, PA", startDate: day(-540) },
-    { name: "Sam Rivera", role: "Studio Manager", status: "Core Team", email: "sam@jordancreate.co", location: "Brooklyn, NY", startDate: day(-420) },
-    { name: "Tobi Adeyemi", role: "Creative Technologist", status: "Freelance", email: "tobi@ninevolt.dev", location: "London, UK", startDate: day(-200), notes: "Two days a week, tooling and web." },
-    { name: "Grace Lin", role: "Motion Designer", status: "Contractor", email: "grace@gracelin.tv", location: "Los Angeles, CA", startDate: day(-90), notes: "Booked through the summit; revisit after." },
-    { name: "Ed Kowalski", role: "Producer", status: "Alumni", email: "ed.kowalski@gmail.com", location: "Chicago, IL", startDate: day(-900), notes: "Left in the spring. Check nothing is still in his name." },
+    { firstName: "Jordan", lastName: "Avery", role: "Founder & Creative Director", status: "Core Team", email: "jordan@jordancreate.co", location: "Brooklyn, NY", startDate: day(-1100) },
+    { firstName: "Priya", lastName: "Sharma", role: "Design Director", status: "Core Team", email: "priya@jordancreate.co", location: "Brooklyn, NY", startDate: day(-760) },
+    { firstName: "Marcus", lastName: "Webb", role: "Senior Designer", status: "Core Team", email: "marcus@jordancreate.co", location: "Philadelphia, PA", startDate: day(-540) },
+    { firstName: "Sam", lastName: "Rivera", role: "Studio Manager", status: "Core Team", email: "sam@jordancreate.co", location: "Brooklyn, NY", startDate: day(-420) },
+    { firstName: "Tobi", lastName: "Adeyemi", role: "Creative Technologist", status: "Freelance", email: "tobi@ninevolt.dev", location: "London, UK", startDate: day(-200), notes: "Two days a week, tooling and web." },
+    { firstName: "Grace", lastName: "Lin", role: "Motion Designer", status: "Contractor", email: "grace@gracelin.tv", location: "Los Angeles, CA", startDate: day(-90), notes: "Booked through the summit; revisit after." },
+    { firstName: "Ed", lastName: "Kowalski", role: "Producer", status: "Alumni", email: "ed.kowalski@gmail.com", location: "Chicago, IL", startDate: day(-900), notes: "Left in the spring. Check nothing is still in his name." },
   ];
   const people: Record<string, { id: string }> = {};
   for (const p of peopleSeed) {
-    people[p.name] = await db.person.create({ data: p });
+    people[`${p.firstName} ${p.lastName}`] = await db.person.create({ data: p });
   }
 
   // ------------------------------------------------------------------ Access
@@ -470,12 +470,12 @@ export async function seedAll(db: PrismaClient) {
 
   // ---------------------------------------------------------------- Sponsors
   const sponsorSeed = [
-    { company: "Northwind Coffee", contactName: "Ana Duarte", contactRole: "Head of Brand", email: "ana@northwind.coffee", status: "Won", tier: "Gold", value: 25000, closeDate: day(-15), eventId: summitEvent.id, nextStep: "Countersigned. Booth plan due to production." },
-    { company: "Mono Type Foundry", contactName: "Felix Braun", contactRole: "Marketing Lead", email: "felix@monotype.example", status: "Negotiation", tier: "Silver", value: 12000, closeDate: day(9), eventId: summitEvent.id, nextStep: "They want the lanyard placement — counter with workshop naming." },
-    { company: "Fieldnotes Software", contactName: "Dana White", contactRole: "VP Marketing", email: "dana@fieldnotes.app", status: "Proposal", tier: "Gold", value: 30000, closeDate: day(18), eventId: summitEvent.id, nextStep: "Proposal sent Tuesday. Follow up Friday if quiet." },
-    { company: "Beacon Insurance", contactName: "Rob Ellis", contactRole: "Partnerships", email: "r.ellis@beacon.example", status: "Contacted", tier: "Partner", value: 8000, closeDate: day(30), eventId: summitEvent.id, nextStep: "Intro call booked." },
-    { company: "Halcyon Hotels", contactName: "Marie Chen", contactRole: "Brand Director", email: "marie@halcyon.example", status: "Lead", tier: "In-kind", value: 6000, eventId: summitEvent.id, nextStep: "Pitch room-block + speaker accommodation trade." },
-    { company: "Crest Bank", contactName: "Tom Ferry", contactRole: "Sponsorships", email: "t.ferry@crest.example", status: "Lost", tier: "Title", value: 60000, closeDate: day(-30), eventId: summitEvent.id, notes: "Went with a fintech conference instead. Re-approach for 2027." },
+    { company: "Northwind Coffee", contactFirstName: "Ana", contactLastName: "Duarte", contactRole: "Head of Brand", email: "ana@northwind.coffee", status: "Won", tier: "Gold", value: 25000, closeDate: day(-15), eventId: summitEvent.id, nextStep: "Countersigned. Booth plan due to production." },
+    { company: "Mono Type Foundry", contactFirstName: "Felix", contactLastName: "Braun", contactRole: "Marketing Lead", email: "felix@monotype.example", status: "Negotiation", tier: "Silver", value: 12000, closeDate: day(9), eventId: summitEvent.id, nextStep: "They want the lanyard placement — counter with workshop naming." },
+    { company: "Fieldnotes Software", contactFirstName: "Dana", contactLastName: "White", contactRole: "VP Marketing", email: "dana@fieldnotes.app", status: "Proposal", tier: "Gold", value: 30000, closeDate: day(18), eventId: summitEvent.id, nextStep: "Proposal sent Tuesday. Follow up Friday if quiet." },
+    { company: "Beacon Insurance", contactFirstName: "Rob", contactLastName: "Ellis", contactRole: "Partnerships", email: "r.ellis@beacon.example", status: "Contacted", tier: "Partner", value: 8000, closeDate: day(30), eventId: summitEvent.id, nextStep: "Intro call booked." },
+    { company: "Halcyon Hotels", contactFirstName: "Marie", contactLastName: "Chen", contactRole: "Brand Director", email: "marie@halcyon.example", status: "Lead", tier: "In-kind", value: 6000, eventId: summitEvent.id, nextStep: "Pitch room-block + speaker accommodation trade." },
+    { company: "Crest Bank", contactFirstName: "Tom", contactLastName: "Ferry", contactRole: "Sponsorships", email: "t.ferry@crest.example", status: "Lost", tier: "Title", value: 60000, closeDate: day(-30), eventId: summitEvent.id, notes: "Went with a fintech conference instead. Re-approach for 2027." },
   ];
   const sponsors: Record<string, { id: string }> = {};
   for (const sp of sponsorSeed) {
@@ -492,14 +492,14 @@ export async function seedAll(db: PrismaClient) {
   // ------------------------------------------------------------ Ticket buyers
   await db.ticketOrder.createMany({
     data: [
-      { eventId: summitEvent.id, buyerName: "Jamie Ortiz", email: "jamie@studioplural.com", ticketType: "General", quantity: 2, amount: 580, status: "Paid", purchasedAt: day(-21) },
-      { eventId: summitEvent.id, buyerName: "Wren Taylor", email: "wren@bigco.com", ticketType: "Team", quantity: 6, amount: 1500, status: "Paid", purchasedAt: day(-14), notes: "Design team offsite. Invoice paid net-30." },
-      { eventId: summitEvent.id, buyerName: "Kofi Mensah", email: "kofi@freelance.dev", ticketType: "General", quantity: 1, amount: 290, status: "Paid", purchasedAt: day(-9) },
-      { eventId: summitEvent.id, buyerName: "Lucia Romano", email: "lucia@romano.studio", ticketType: "VIP", quantity: 1, amount: 590, status: "Paid", purchasedAt: day(-6) },
-      { eventId: summitEvent.id, buyerName: "Dev Patel", email: "dev.p@uni.edu", ticketType: "Student", quantity: 1, amount: 120, status: "Refunded", purchasedAt: day(-12), notes: "Exam clash. Refunded in full." },
-      { eventId: summitEvent.id, buyerName: "Chiara Bellini", email: "chiara@formatmag.it", ticketType: "Comp", quantity: 1, amount: 0, status: "Paid", purchasedAt: day(-5), notes: "Speaker alumni comp." },
-      { eventId: workshop.id, buyerName: "Noor Haddad", email: "noor@haddaddesign.com", ticketType: "General", quantity: 1, amount: 450, status: "Checked In", purchasedAt: day(-30) },
-      { eventId: workshop.id, buyerName: "Peter Stone", email: "p.stone@agency.co", ticketType: "General", quantity: 2, amount: 900, status: "Paid", purchasedAt: day(-11) },
+      { eventId: summitEvent.id, buyerFirstName: "Jamie", buyerLastName: "Ortiz", email: "jamie@studioplural.com", ticketType: "General", quantity: 2, amount: 580, status: "Paid", purchasedAt: day(-21) },
+      { eventId: summitEvent.id, buyerFirstName: "Wren", buyerLastName: "Taylor", email: "wren@bigco.com", ticketType: "Team", quantity: 6, amount: 1500, status: "Paid", purchasedAt: day(-14), notes: "Design team offsite. Invoice paid net-30." },
+      { eventId: summitEvent.id, buyerFirstName: "Kofi", buyerLastName: "Mensah", email: "kofi@freelance.dev", ticketType: "General", quantity: 1, amount: 290, status: "Paid", purchasedAt: day(-9) },
+      { eventId: summitEvent.id, buyerFirstName: "Lucia", buyerLastName: "Romano", email: "lucia@romano.studio", ticketType: "VIP", quantity: 1, amount: 590, status: "Paid", purchasedAt: day(-6) },
+      { eventId: summitEvent.id, buyerFirstName: "Dev", buyerLastName: "Patel", email: "dev.p@uni.edu", ticketType: "Student", quantity: 1, amount: 120, status: "Refunded", purchasedAt: day(-12), notes: "Exam clash. Refunded in full." },
+      { eventId: summitEvent.id, buyerFirstName: "Chiara", buyerLastName: "Bellini", email: "chiara@formatmag.it", ticketType: "Comp", quantity: 1, amount: 0, status: "Paid", purchasedAt: day(-5), notes: "Speaker alumni comp." },
+      { eventId: workshop.id, buyerFirstName: "Noor", buyerLastName: "Haddad", email: "noor@haddaddesign.com", ticketType: "General", quantity: 1, amount: 450, status: "Checked In", purchasedAt: day(-30) },
+      { eventId: workshop.id, buyerFirstName: "Peter", buyerLastName: "Stone", email: "p.stone@agency.co", ticketType: "General", quantity: 2, amount: 900, status: "Paid", purchasedAt: day(-11) },
     ],
   });
 

@@ -9,7 +9,8 @@ import { TICKET_STATUS, TICKET_TYPE, constrain } from "@/lib/taxonomy";
 function orderData(form: FormData) {
   const quantity = toNumber(form.get("quantity"));
   return {
-    buyerName: (nullify(form.get("buyerName")) ?? "Unnamed buyer") as string,
+    buyerFirstName: (nullify(form.get("buyerFirstName")) ?? "Unnamed") as string,
+    buyerLastName: (nullify(form.get("buyerLastName")) ?? "") as string,
     email: nullify(form.get("email")),
     ticketType: constrain(form.get("ticketType"), TICKET_TYPE.values, "General"),
     quantity: quantity && quantity >= 1 ? Math.round(quantity) : 1,

@@ -11,12 +11,7 @@ import {
   StatRow,
 } from "@/components/ui";
 import { db } from "@/lib/db";
-import {
-  daysFromToday,
-  formatDate,
-  formatRange,
-  relativeDays,
-} from "@/lib/format";
+import { daysFromToday, formatDate, formatRange, fullName, relativeDays } from "@/lib/format";
 import {
   BOOKING_STATUS,
   CONTENT_STATUS,
@@ -66,7 +61,7 @@ export default async function Dashboard() {
       where: { startDate: { gte: now }, status: { notIn: ["Cancelled", "Complete"] } },
       include: {
         bookings: {
-          include: { speaker: { select: { id: true, name: true } } },
+          include: { speaker: { select: { id: true, firstName: true, lastName: true } } },
           orderBy: { startTime: "asc" },
         },
       },
@@ -235,7 +230,7 @@ export default async function Dashboard() {
                     >
                       <div className="min-w-0">
                         <RowLink href={`/experience/speakers/${b.speaker.id}`}>
-                          {b.speaker.name}
+                          {fullName(b.speaker)}
                         </RowLink>
                         {b.slotTitle ? (
                           <div className="truncate text-[12px] text-ink-3">

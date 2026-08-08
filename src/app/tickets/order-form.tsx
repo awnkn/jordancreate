@@ -24,12 +24,21 @@ export function OrderForm({
     <form action={action}>
       <Panel className="p-5 sm:p-6">
         <FormGrid>
-          <Field label="Buyer" span={2}>
+          <Field label="Buyer first name">
             <Input
-              name="buyerName"
+              name="buyerFirstName"
               required
-              defaultValue={order?.buyerName ?? ""}
-              placeholder="Jamie Ortiz"
+              defaultValue={order?.buyerFirstName ?? ""}
+              placeholder="Jamie"
+            />
+          </Field>
+
+          <Field label="Buyer last name">
+            <Input
+              name="buyerLastName"
+              required
+              defaultValue={order?.buyerLastName ?? ""}
+              placeholder="Ortiz"
             />
           </Field>
 

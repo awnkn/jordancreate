@@ -13,7 +13,7 @@ import {
   RowLink,
 } from "@/components/ui";
 import { db } from "@/lib/db";
-import { formatDate, formatMoney } from "@/lib/format";
+import { formatDate, formatMoney, fullName } from "@/lib/format";
 import { BOOKING_STATUS, SPEAKER_STATUS } from "@/lib/taxonomy";
 import {
   deleteInteraction,
@@ -56,7 +56,7 @@ export default async function SpeakerPage({
     const update = updateSpeaker.bind(null, speaker.id);
     return (
       <>
-        <PageHeader eyebrow="Experience · Speaker" title={`Edit ${speaker.name}`} />
+        <PageHeader eyebrow="Experience · Speaker" title={`Edit ${fullName(speaker)}`} />
         <SpeakerForm
           speaker={speaker}
           topics={topics}
@@ -76,7 +76,7 @@ export default async function SpeakerPage({
     <>
       <PageHeader
         eyebrow="Experience · Speaker"
-        title={speaker.name}
+        title={fullName(speaker)}
         lede={[speaker.role, speaker.company].filter(Boolean).join(" · ") || undefined}
         actions={
           <>
@@ -85,7 +85,7 @@ export default async function SpeakerPage({
             </Link>
             <DeleteButton
               action={del}
-              confirmText={`Delete ${speaker.name}? Their bookings and contact history go too.`}
+              confirmText={`Delete ${fullName(speaker)}? Their bookings and contact history go too.`}
             />
           </>
         }
