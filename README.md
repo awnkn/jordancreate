@@ -20,9 +20,12 @@ the next stage.
 
 ## Running it
 
+Needs a PostgreSQL database — any host works (Neon, Prisma Postgres, Supabase,
+or a local install).
+
 ```bash
 npm install
-cp .env.example .env      # DATABASE_URL for the local SQLite file
+cp .env.example .env      # then set DATABASE_URL to your Postgres
 npm run setup             # migrate, generate the client, seed sample data
 npm run dev               # http://localhost:3000
 ```
@@ -49,8 +52,8 @@ To start from nothing instead, run `npm run db:reset` and skip the seed.
 
 ## How it fits together
 
-**Data.** `prisma/schema.prisma` is the source of truth. SQLite has no enum type, so
-every status and format column is a plain string constrained in the app layer by
+**Data.** `prisma/schema.prisma` is the source of truth (PostgreSQL). Every status and
+format column is a plain string constrained in the app layer by
 `src/lib/taxonomy.ts` — that file lists the allowed values *and* the tone each one
 renders as, and every server action clamps submitted values against it with
 `constrain()`. Adding a status means editing that one file.
@@ -96,6 +99,21 @@ src/
     db.ts, format.ts, nav.ts, models.ts
 ```
 
+## Deploying
+
+The repo is Vercel-ready:
+
+1. Push to GitHub (done if you're reading this there).
+2. On [vercel.com](https://vercel.com) → **Add New → Project** → import this repo.
+   The `vercel-build` script runs migrations automatically on every deploy.
+3. Give it a database: in the Vercel project, **Storage → Create Database →
+   Neon (Postgres)** — this injects `DATABASE_URL` automatically. Any other
+   Postgres host works too; just set `DATABASE_URL` in the project's
+   environment variables.
+4. Optional demo data: set a `SETUP_TOKEN` env var, redeploy, then visit
+   `https://<your-app>.vercel.app/api/seed?token=<SETUP_TOKEN>` once.
+   Remove the env var when you start entering real data.
+
 ## Design
 
 The direction is *the production schedule, well printed*: a warm paper ground, ink
@@ -113,6 +131,5 @@ dark inversion would be a different product.
   that section's `*-form.tsx` and its `actions.ts` data mapper.
 - Adding a status value: add it to the vocabulary in `src/lib/taxonomy.ts` with a tone.
   Filter bars, badges and selects all pick it up automatically.
-- SQLite's `contains` filter is case-sensitive for non-ASCII; search is deliberately
-  simple. Moving to Postgres later means changing the datasource and the adapter in
-  `src/lib/db.ts` — the queries themselves are portable.
+- Search uses Prisma `contains` filters — deliberately simple. Swap in Postgres
+  full-text search later if the data outgrows it.
