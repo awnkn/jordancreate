@@ -30,8 +30,8 @@ export default async function ContentPage({
           ? {
               OR: [
                 { title: { contains: q } },
-                { channel: { contains: q } },
                 { owner: { contains: q } },
+                { platforms: { has: q } },
               ],
             }
           : {}),
@@ -123,6 +123,15 @@ export default async function ContentPage({
                     </td>
                     <td>
                       <Chip>{c.format}</Chip>
+                      {c.platforms.length > 0 ? (
+                        <div className="mt-1 flex flex-wrap gap-1">
+                          {c.platforms.map((p) => (
+                            <span key={p} className="text-[11px] text-ink-3">
+                              {p}
+                            </span>
+                          ))}
+                        </div>
+                      ) : null}
                     </td>
                     <td>
                       <Badge value={c.status} vocab={CONTENT_STATUS} />

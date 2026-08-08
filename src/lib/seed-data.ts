@@ -340,7 +340,7 @@ export async function seedAll(db: PrismaClient) {
     data: {
       title: "What a summit actually costs",
       format: "Article",
-      channel: "Studio journal",
+      platforms: ["Website"],
       status: "Drafting",
       owner: "Jordan Avery",
       brief: "A full P&L breakdown of the 2025 summit, published openly.",
@@ -354,7 +354,7 @@ export async function seedAll(db: PrismaClient) {
     data: {
       title: "Northwind: designing for 40 storefronts",
       format: "Case Study",
-      channel: "Website",
+      platforms: ["Website"],
       status: "Idea",
       owner: "Priya Sharma",
       brief: "Ship two weeks after the rollout completes, with in-store photography.",
@@ -368,7 +368,7 @@ export async function seedAll(db: PrismaClient) {
     data: {
       title: "The tools we actually use",
       format: "Newsletter",
-      channel: "Email",
+      platforms: ["Newsletter"],
       status: "Scheduled",
       owner: "Tobi Adeyemi",
       brief: "Honest inventory of the AI tooling that survived a year in production.",
@@ -381,7 +381,7 @@ export async function seedAll(db: PrismaClient) {
     data: {
       title: "Summit 2026 speaker announce",
       format: "Social",
-      channel: "Instagram",
+      platforms: ["Instagram", "TikTok"],
       status: "Review",
       owner: "Sam Rivera",
       brief: "Six-card carousel. Blocked until Ingrid countersigns.",
@@ -395,7 +395,7 @@ export async function seedAll(db: PrismaClient) {
     data: {
       title: "Atlas Field Guide, behind the scenes",
       format: "Video",
-      channel: "YouTube",
+      platforms: ["YouTube"],
       status: "Published",
       owner: "Marcus Webb",
       brief: "Nine-minute press-check documentary.",
@@ -410,7 +410,7 @@ export async function seedAll(db: PrismaClient) {
     data: {
       title: "Burnout is an operations problem",
       format: "Article",
-      channel: "Studio journal",
+      platforms: ["Website", "LinkedIn"],
       status: "Idea",
       owner: "Jordan Avery",
       brief: "Pairs with Renata's session if she confirms.",

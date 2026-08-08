@@ -52,6 +52,19 @@ export const CONTENT_STATUS = vocab({
   Archived: "neutral",
 });
 
+export const CONTENT_PLATFORM = {
+  values: [
+    "Website",
+    "Instagram",
+    "TikTok",
+    "YouTube",
+    "LinkedIn",
+    "X",
+    "Newsletter",
+    "Podcast",
+  ] as const,
+};
+
 export const CONTENT_FORMAT = {
   values: ["Article", "Video", "Newsletter", "Social", "Podcast", "Case Study", "Report"] as const,
 };

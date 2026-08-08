@@ -1,5 +1,6 @@
 import { CancelLink, SubmitButton } from "@/components/form-actions";
 import {
+  ChipPicker,
   Field,
   FormGrid,
   FormSection,
@@ -10,7 +11,7 @@ import {
 } from "@/components/form";
 import { Panel } from "@/components/ui";
 import { dateInputValue } from "@/lib/format";
-import { CONTENT_FORMAT, CONTENT_STATUS } from "@/lib/taxonomy";
+import { CONTENT_FORMAT, CONTENT_PLATFORM, CONTENT_STATUS } from "@/lib/taxonomy";
 import type { ContentPiece } from "@/lib/models";
 
 export function ContentForm({
@@ -51,11 +52,11 @@ export function ContentForm({
             />
           </Field>
 
-          <Field label="Channel" hint="Where it goes out.">
-            <Input
-              name="channel"
-              defaultValue={piece?.channel ?? ""}
-              placeholder="Studio journal"
+          <Field label="Platforms" span={2} hint="Everywhere this piece gets published.">
+            <ChipPicker
+              name="platforms"
+              options={CONTENT_PLATFORM.values}
+              selected={piece?.platforms ?? []}
             />
           </Field>
 

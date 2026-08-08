@@ -4,7 +4,12 @@ import { redirect } from "next/navigation";
 import { revalidateAll } from "@/lib/revalidate";
 import { db } from "@/lib/db";
 import { nullify, toDate } from "@/lib/format";
-import { CONTENT_FORMAT, CONTENT_STATUS, constrain } from "@/lib/taxonomy";
+import {
+  CONTENT_FORMAT,
+  CONTENT_PLATFORM,
+  CONTENT_STATUS,
+  constrain,
+} from "@/lib/taxonomy";
 
 function topicIds(form: FormData): string[] {
   return form.getAll("topicIds").filter((v): v is string => typeof v === "string");
@@ -14,7 +19,10 @@ function contentData(form: FormData) {
   return {
     title: (nullify(form.get("title")) ?? "Untitled") as string,
     format: constrain(form.get("format"), CONTENT_FORMAT.values, "Article"),
-    channel: nullify(form.get("channel")),
+    platforms: form
+      .getAll("platforms")
+      .filter((v): v is string => typeof v === "string")
+      .filter((v) => (CONTENT_PLATFORM.values as readonly string[]).includes(v)),
     status: constrain(form.get("status"), CONTENT_STATUS.values, "Idea"),
     owner: nullify(form.get("owner")),
     brief: nullify(form.get("brief")),

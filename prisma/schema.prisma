@@ -71,7 +71,8 @@ model ContentPiece {
   id          String    @id @default(cuid())
   title       String
   format      String    @default("Article")
-  channel     String?
+  // Where it gets published — values from CONTENT_PLATFORM in taxonomy.ts.
+  platforms   String[]  @default([])
   status      String    @default("Idea")
   owner       String?
   brief       String?

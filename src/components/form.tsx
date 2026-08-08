@@ -79,6 +79,38 @@ export function Select({
   );
 }
 
+/** Multi-select over a fixed vocabulary, rendered as checkbox chips. */
+export function ChipPicker({
+  name,
+  options,
+  selected,
+}: {
+  name: string;
+  options: readonly string[];
+  selected: string[];
+}) {
+  const chosen = new Set(selected);
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {options.map((o) => (
+        <label
+          key={o}
+          className="group inline-flex cursor-pointer items-center gap-1.5 rounded-xs border border-rule-strong bg-surface px-2 py-1 text-[12.5px] transition-colors hover:border-ink-3 has-checked:border-clay has-checked:bg-clay-tint has-checked:text-clay-deep"
+        >
+          <input
+            type="checkbox"
+            name={name}
+            value={o}
+            defaultChecked={chosen.has(o)}
+            className="size-3 accent-clay"
+          />
+          {o}
+        </label>
+      ))}
+    </div>
+  );
+}
+
 /** Multi-select over topics, rendered as checkboxes so it stays keyboard-simple. */
 export function TopicPicker({
   topics,

@@ -89,7 +89,17 @@ export default async function ContentDetailPage({
             <Detail label="Format">
               <Chip>{piece.format}</Chip>
             </Detail>
-            <Detail label="Channel">{piece.channel ?? "—"}</Detail>
+            <Detail label="Platforms">
+              {piece.platforms.length === 0 ? (
+                "—"
+              ) : (
+                <div className="flex flex-wrap gap-1">
+                  {piece.platforms.map((p) => (
+                    <Chip key={p}>{p}</Chip>
+                  ))}
+                </div>
+              )}
+            </Detail>
             <Detail label="Owner">{piece.owner ?? "—"}</Detail>
             <Detail label="Publish">
               {piece.publishDate ? (
