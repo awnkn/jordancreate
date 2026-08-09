@@ -72,6 +72,10 @@ export const NAV: NavItem[] = [
     label: "People",
     href: "/people",
     match: ["/people"],
+    children: [
+      { label: "Team", href: "/people" },
+      { label: "Responsibilities", href: "/people/responsibilities" },
+    ],
   },
   {
     label: "Access",

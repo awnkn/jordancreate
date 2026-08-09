@@ -14,6 +14,7 @@ export type {
   InteractionModel as Interaction,
   PersonModel as Person,
   ProjectModel as Project,
+  ResponsibilityModel as Responsibility,
   SpeakerModel as Speaker,
   SponsorModel as Sponsor,
   TaskModel as Task,

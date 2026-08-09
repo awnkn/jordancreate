@@ -27,6 +27,7 @@ export async function hasData(db: PrismaClient): Promise<boolean> {
 export async function seedAll(db: PrismaClient) {
   // Wipe in dependency order so the seed is re-runnable.
   await db.interaction.deleteMany();
+  await db.responsibility.deleteMany();
   await db.vendor.deleteMany();
   await db.accessGrant.deleteMany();
   await db.person.deleteMany();
@@ -514,6 +515,32 @@ export async function seedAll(db: PrismaClient) {
     ],
   });
 
+  // -------------------------------------------------------- Responsibilities
+  const respSeed: [string, string, string, string?][] = [
+    ["Jordan Avery", "Studio vision & final sign-off", "Owner"],
+    ["Jordan Avery", "Summit programming", "Owner", "Owns the speaker line-up and running order."],
+    ["Jordan Avery", "Client relationships", "Backup"],
+    ["Priya Sharma", "Client delivery quality", "Owner", "Every deliverable ships through her review."],
+    ["Priya Sharma", "Northwind account", "Owner"],
+    ["Priya Sharma", "Hiring", "Support"],
+    ["Marcus Webb", "Print production", "Owner", "Press checks, paper, and vendor handoff."],
+    ["Marcus Webb", "Summit stage design", "Backup"],
+    ["Sam Rivera", "Studio operations", "Owner", "Space, vendors, contracts, and keys."],
+    ["Sam Rivera", "Insurance & compliance", "Owner"],
+    ["Sam Rivera", "Summit logistics", "Owner", "Venue, travel, AV, and the run-of-show doc."],
+    ["Tobi Adeyemi", "Internal tooling", "Owner"],
+    ["Tobi Adeyemi", "AI workflow", "Support"],
+    ["Grace Lin", "Invoicing & bookkeeping", "Owner"],
+    ["Grace Lin", "Budget tracking", "Owner", "Monthly actuals against every project budget."],
+    ["Ed Kowalski", "Instagram & TikTok publishing", "Owner"],
+    ["Ed Kowalski", "Newsletter", "Backup"],
+  ];
+  for (const [who, area, level, detail] of respSeed) {
+    await db.responsibility.create({
+      data: { area, level, detail: detail ?? null, personId: people[who].id },
+    });
+  }
+
   // ----------------------------------------------------------------- Vendors
   const vendorSeed = [
     { company: "Brightline AV", kind: "Supplier", status: "Active", contactFirstName: "Lou", contactLastName: "Marchetti", email: "lou@brightline.av", service: "Stage AV, lighting and playback", notes: "Redlined summit contract still with their legal." },
@@ -542,5 +569,6 @@ export async function seedAll(db: PrismaClient) {
     sponsors: await db.sponsor.count(),
     tickets: await db.ticketOrder.count(),
     vendors: await db.vendor.count(),
+    responsibilities: await db.responsibility.count(),
   };
 }

@@ -7,6 +7,7 @@ import { revalidateAll } from "@/lib/revalidate";
 import {
   ACCESS_LEVEL,
   ACCESS_STATUS,
+  OWNERSHIP_LEVEL,
   PERSON_STATUS,
   constrain,
 } from "@/lib/taxonomy";
@@ -85,5 +86,41 @@ export async function setGrantStatus(id: string, status: string) {
 
 export async function deleteGrant(id: string) {
   await db.accessGrant.delete({ where: { id } });
+  revalidateAll();
+}
+
+// ----------------------------------------------------------- Responsibilities
+
+function responsibilityData(form: FormData) {
+  return {
+    area: (nullify(form.get("area")) ?? "Untitled area") as string,
+    level: constrain(form.get("level"), OWNERSHIP_LEVEL.values, "Owner"),
+    detail: nullify(form.get("detail")),
+  };
+}
+
+/** Add a responsibility from a person's page. */
+export async function createResponsibilityForPerson(
+  personId: string,
+  form: FormData,
+) {
+  await db.responsibility.create({
+    data: { ...responsibilityData(form), personId },
+  });
+  revalidateAll();
+}
+
+/** Add a responsibility from the register, where the person is picked. */
+export async function createResponsibility(form: FormData) {
+  const personId = nullify(form.get("personId"));
+  if (!personId) return;
+  await db.responsibility.create({
+    data: { ...responsibilityData(form), personId },
+  });
+  revalidateAll();
+}
+
+export async function deleteResponsibility(id: string) {
+  await db.responsibility.delete({ where: { id } });
   revalidateAll();
 }

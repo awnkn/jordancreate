@@ -223,7 +223,8 @@ model Person {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
-  access AccessGrant[]
+  access           AccessGrant[]
+  responsibilities Responsibility[]
 
   @@index([status])
 }
@@ -300,6 +301,21 @@ model TicketOrder {
 
   @@index([status])
   @@index([eventId])
+}
+
+// Who owns what: one row per area of responsibility a person carries.
+model Responsibility {
+  id        String   @id @default(cuid())
+  area      String
+  // Owner | Backup | Support — from OWNERSHIP_LEVEL in taxonomy.ts.
+  level     String   @default("Owner")
+  detail    String?
+  createdAt DateTime @default(now())
+
+  personId String
+  person   Person @relation(fields: [personId], references: [id], onDelete: Cascade)
+
+  @@index([personId])
 }
 
 // ------------------------------------------------------------------- Vendors

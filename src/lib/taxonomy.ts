@@ -202,6 +202,13 @@ export const TICKET_TYPE = {
   values: ["General", "VIP", "Student", "Team", "Comp"] as const,
 };
 
+/** How strongly a person holds a responsibility. */
+export const OWNERSHIP_LEVEL = vocab({
+  Owner: "success",
+  Backup: "info",
+  Support: "neutral",
+});
+
 // ------------------------------------------------------------------- Vendors
 
 export const VENDOR_KIND = {

@@ -33,7 +33,14 @@ export default async function PeoplePage({ searchParams }: PageProps<"/people">)
             }
           : {}),
       },
-      include: { _count: { select: { access: true } } },
+      include: {
+        _count: { select: { access: true } },
+        responsibilities: {
+          where: { level: "Owner" },
+          select: { area: true },
+          orderBy: { area: "asc" },
+        },
+      },
       orderBy: [{ firstName: "asc" }, { lastName: "asc" }],
     }),
     db.person.groupBy({ by: ["status"], _count: true }),
@@ -98,6 +105,7 @@ export default async function PeoplePage({ searchParams }: PageProps<"/people">)
                 <tr>
                   <th className="pt-4">Person</th>
                   <th className="pt-4">Status</th>
+                  <th className="pt-4">Owns</th>
                   <th className="pt-4">Email</th>
                   <th className="pt-4">Location</th>
                   <th className="pt-4">Since</th>
@@ -115,6 +123,18 @@ export default async function PeoplePage({ searchParams }: PageProps<"/people">)
                     </td>
                     <td>
                       <Badge value={p.status} vocab={PERSON_STATUS} />
+                    </td>
+                    <td className="max-w-[240px]">
+                      {p.responsibilities.length === 0 ? (
+                        <span className="text-ink-3">—</span>
+                      ) : (
+                        <span className="text-[12.5px] text-ink-2">
+                          {p.responsibilities.slice(0, 3).map((r) => r.area).join(", ")}
+                          {p.responsibilities.length > 3
+                            ? ` +${p.responsibilities.length - 3}`
+                            : ""}
+                        </span>
+                      )}
                     </td>
                     <td className="text-ink-2">{p.email ?? "—"}</td>
                     <td className="text-ink-2">{p.location ?? "—"}</td>

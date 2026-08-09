@@ -15,12 +15,15 @@ import { dateInputValue, formatDate, fullName, relativeDays } from "@/lib/format
 import {
   ACCESS_LEVEL,
   ACCESS_STATUS,
+  OWNERSHIP_LEVEL,
   PERSON_STATUS,
 } from "@/lib/taxonomy";
 import {
   createGrantForPerson,
+  createResponsibilityForPerson,
   deleteGrant,
   deletePerson,
+  deleteResponsibility,
   setGrantStatus,
   updatePerson,
 } from "../actions";
@@ -37,7 +40,10 @@ export default async function PersonPage({
 
   const person = await db.person.findUnique({
     where: { id },
-    include: { access: { orderBy: [{ status: "asc" }, { system: "asc" }] } },
+    include: {
+      access: { orderBy: [{ status: "asc" }, { system: "asc" }] },
+      responsibilities: { orderBy: [{ level: "asc" }, { area: "asc" }] },
+    },
   });
 
   if (!person) notFound();
@@ -58,6 +64,7 @@ export default async function PersonPage({
   }
 
   const addGrant = createGrantForPerson.bind(null, person.id);
+  const addResp = createResponsibilityForPerson.bind(null, person.id);
   const del = deletePerson.bind(null, person.id);
 
   return (
@@ -125,6 +132,64 @@ export default async function PersonPage({
             </div>
           </Panel>
         </div>
+
+        <div className="space-y-6">
+        <Panel title="Roles & responsibilities">
+          <form action={addResp} className="border-b border-rule px-5 py-4">
+            <div className="grid gap-3 sm:grid-cols-[1fr_130px_auto]">
+              <Field label="Area">
+                <Input name="area" required placeholder="Summit logistics" />
+              </Field>
+              <Field label="Level">
+                <Select name="level" options={OWNERSHIP_LEVEL.values} />
+              </Field>
+              <div className="flex items-end">
+                <SubmitButton label="Add" pendingLabel="Adding…" />
+              </div>
+            </div>
+            <div className="mt-3">
+              <Field label="What owning it means">
+                <Input name="detail" placeholder="Optional — one sentence of scope." />
+              </Field>
+            </div>
+          </form>
+          {person.responsibilities.length === 0 ? (
+            <p className="px-5 py-6 text-[13px] text-ink-3">
+              Nothing assigned yet. If it matters and nobody owns it, it lands
+              here first.
+            </p>
+          ) : (
+            <ul className="divide-y divide-rule">
+              {person.responsibilities.map((r) => {
+                const removeResp = deleteResponsibility.bind(null, r.id);
+                return (
+                  <li
+                    key={r.id}
+                    className="group flex items-start justify-between gap-3 px-5 py-3"
+                  >
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="font-medium text-ink">{r.area}</span>
+                        <Badge value={r.level} vocab={OWNERSHIP_LEVEL} />
+                      </div>
+                      {r.detail ? (
+                        <p className="mt-1 text-[12.5px] text-ink-2">{r.detail}</p>
+                      ) : null}
+                    </div>
+                    <form action={removeResp} className="shrink-0">
+                      <button
+                        type="submit"
+                        className="text-[12px] text-ink-3 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100 hover:text-tone-danger-fg"
+                      >
+                        Remove
+                      </button>
+                    </form>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </Panel>
 
         <Panel title="Access">
           <form action={addGrant} className="border-b border-rule px-5 py-4">
@@ -207,6 +272,7 @@ export default async function PersonPage({
             </div>
           )}
         </Panel>
+        </div>
       </div>
     </>
   );
