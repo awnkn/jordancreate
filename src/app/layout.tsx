@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter } from "next/font/google";
-import { Sidebar } from "@/components/sidebar";
 import "./globals.css";
-
 
 const inter = Inter({
   variable: "--font-inter",
@@ -29,16 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${inter.variable} ${fraunces.variable} h-full antialiased`}
     >
-      <body className="min-h-full">
-        <div className="lg:flex lg:min-h-dvh">
-          <Sidebar />
-          <main className="min-w-0 flex-1">
-            <div className="mx-auto max-w-[1180px] px-5 py-8 sm:px-8 lg:py-10">
-              {children}
-            </div>
-          </main>
-        </div>
-      </body>
+      <body className="min-h-full">{children}</body>
     </html>
   );
 }

@@ -37,6 +37,7 @@ automatic: every push to the `claude/jordan-create-os-zv6tab` branch on
 | `/people` | People | The team, with roles, photos-less profiles, and an "Owns" summary |
 | `/people/responsibilities` | Roles & responsibilities | The accountability chart: area + level (Owner/Backup/Support) per person |
 | `/access` | Access | Who holds which system/tool/key, grant/revoke, offboarding checklist |
+| `/login` | Sign in | Username + password; first-run setup when nobody has credentials |
 | `/api/seed` | Demo data loader | GET with `?token=<SETUP_TOKEN>`; refuses on non-empty DB without `&force=1`; 404 when SETUP_TOKEN unset |
 
 ## 3. Stack
@@ -79,6 +80,14 @@ These are the rules the whole codebase follows; keep following them.
   vendors), `avatar.tsx` (photo or initials on brand gradient).
 - **Client components are rare on purpose**: only the sidebar and the
   submit/delete buttons. Everything else is server-rendered.
+- **Authentication** (`src/lib/auth.ts`, `src/proxy.ts`): usernames and
+  scrypt-hashed passwords live on Person; sessions are HMAC-signed HttpOnly
+  cookies (30 days). `src/proxy.ts` walls off every route except `/login`,
+  `/api/seed` and static assets; the `(os)` layout re-checks the session
+  against the database, so removing a login locks that person out on their
+  next page load. Logins are managed on each person's profile; when no login
+  exists at all, `/login` offers one-time first-run setup. Route structure:
+  the app shell lives in `src/app/(os)/…`, the bare login page outside it.
 
 ## 5. Data model (summary — `prisma/schema.prisma` is authoritative)
 
@@ -111,8 +120,9 @@ or `SetNull` (project links), so removing a record never strands children.
   Supabase → Connect → Session pooler; replace `[YOUR-PASSWORD]`.
 - **SETUP_TOKEN**: optional Render env var enabling `/api/seed`. Delete it
   once real data is in.
-- **No authentication yet** — anyone with the URL has full read/write.
-  Add auth before sharing the URL beyond the team.
+- **AUTH_SECRET**: optional but recommended — signs session cookies. Without
+  it the secret is derived from `DATABASE_URL`, so rotating the database
+  password logs everyone out.
 
 ## 7. Running locally
 
@@ -204,5 +214,7 @@ in `public/` — which is why the original `brand-lockup.png` is committed.
 - **One Vendor/Guest model with a kind/category column** rather than separate
   tables per roster — same workflow, different slice; new rosters are one
   taxonomy entry away.
-- **No auth yet** — accepted while the tool is private-by-obscurity; must be
-  added before real client/financial data is considered sensitive.
+- **Auth is self-contained** (no Supabase Auth/OAuth) — the People section
+  already existed as the user registry, sessions need no extra service, and
+  password reset is a teammate action rather than an email flow. Revisit if
+  the team outgrows shared-trust password management.

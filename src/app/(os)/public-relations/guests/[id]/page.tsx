@@ -11,7 +11,7 @@ import {
   PageHeader,
   Panel,
 } from "@/components/ui";
-import { deleteInteraction } from "@/app/experience/actions";
+import { deleteInteraction } from "@/app/(os)/experience/actions";
 import { db } from "@/lib/db";
 import { formatCount, formatDate, fullName, relativeDays } from "@/lib/format";
 import { GUEST_STATUS, categorySlug } from "@/lib/taxonomy";

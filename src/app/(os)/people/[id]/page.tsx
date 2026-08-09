@@ -24,6 +24,8 @@ import {
   deleteGrant,
   deletePerson,
   deleteResponsibility,
+  removeCredentials,
+  setCredentials,
   setGrantStatus,
   updatePerson,
 } from "../actions";
@@ -36,7 +38,8 @@ export default async function PersonPage({
   searchParams,
 }: PageProps<"/people/[id]">) {
   const { id } = await params;
-  const { edit } = await searchParams;
+  const { edit, login } = await searchParams;
+  const loginMsg = typeof login === "string" ? login : null;
 
   const person = await db.person.findUnique({
     where: { id },
@@ -65,6 +68,8 @@ export default async function PersonPage({
 
   const addGrant = createGrantForPerson.bind(null, person.id);
   const addResp = createResponsibilityForPerson.bind(null, person.id);
+  const saveLogin = setCredentials.bind(null, person.id);
+  const dropLogin = removeCredentials.bind(null, person.id);
   const del = deletePerson.bind(null, person.id);
 
   return (
@@ -120,6 +125,68 @@ export default async function PersonPage({
                 )}
               </Detail>
             </DetailList>
+          </Panel>
+
+          <Panel title="Login">
+            <div className="px-5 py-4">
+              {person.username ? (
+                <p className="text-[13px] text-ink-2">
+                  Signs in as{" "}
+                  <span className="tnum font-medium text-ink">{person.username}</span>.
+                  Leave the password blank to keep it.
+                </p>
+              ) : (
+                <p className="text-[13px] text-ink-2">
+                  No login yet — set a username and password to give them access
+                  to this OS.
+                </p>
+              )}
+              <form action={saveLogin} className="mt-3 space-y-3">
+                <Field label="Username">
+                  <Input
+                    name="username"
+                    required
+                    defaultValue={person.username ?? ""}
+                    placeholder="priya"
+                  />
+                </Field>
+                <Field label={person.username ? "New password" : "Password"}>
+                  <Input
+                    type="password"
+                    name="password"
+                    minLength={8}
+                    autoComplete="new-password"
+                    placeholder="At least 8 characters"
+                  />
+                </Field>
+                {loginMsg === "taken" ? (
+                  <p className="text-[12.5px] text-tone-danger-fg">
+                    That username is already in use by someone else.
+                  </p>
+                ) : loginMsg === "short" ? (
+                  <p className="text-[12.5px] text-tone-danger-fg">
+                    The password needs at least 8 characters.
+                  </p>
+                ) : loginMsg === "saved" ? (
+                  <p className="text-[12.5px] text-tone-success-fg">Login saved.</p>
+                ) : null}
+                <div className="flex items-center gap-2">
+                  <SubmitButton
+                    label={person.username ? "Update login" : "Create login"}
+                    pendingLabel="Saving…"
+                  />
+                  {person.username ? (
+                    <button
+                      type="submit"
+                      formAction={dropLogin}
+                      className="btn btn-danger"
+                    >
+                      Remove login
+                    </button>
+                  ) : null}
+                </div>
+              </form>
+            </div>
           </Panel>
 
           <Panel title="Notes">

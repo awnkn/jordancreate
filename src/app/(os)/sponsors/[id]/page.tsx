@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { deleteInteraction } from "@/app/experience/actions";
+import { deleteInteraction } from "@/app/(os)/experience/actions";
 import { DeleteButton } from "@/components/form-actions";
 import { InteractionLog } from "@/components/interaction-log";
 import {

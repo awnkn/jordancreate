@@ -210,10 +210,13 @@ model Guest {
 
 // The studio's people — staff and regular freelancers.
 model Person {
-  id        String    @id @default(cuid())
-  firstName String
-  lastName  String
-  role      String?
+  id           String    @id @default(cuid())
+  firstName    String
+  lastName     String
+  // Login credentials — set from the person's profile. Null = cannot log in.
+  username     String?   @unique
+  passwordHash String?
+  role         String?
   status    String    @default("Core Team")
   email     String?
   phone     String?

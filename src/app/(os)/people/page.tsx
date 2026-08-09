@@ -105,6 +105,7 @@ export default async function PeoplePage({ searchParams }: PageProps<"/people">)
                 <tr>
                   <th className="pt-4">Person</th>
                   <th className="pt-4">Status</th>
+                  <th className="pt-4">Login</th>
                   <th className="pt-4">Owns</th>
                   <th className="pt-4">Email</th>
                   <th className="pt-4">Location</th>
@@ -124,6 +125,7 @@ export default async function PeoplePage({ searchParams }: PageProps<"/people">)
                     <td>
                       <Badge value={p.status} vocab={PERSON_STATUS} />
                     </td>
+                    <td className="tnum text-ink-2">{p.username ?? "—"}</td>
                     <td className="max-w-[240px]">
                       {p.responsibilities.length === 0 ? (
                         <span className="text-ink-3">—</span>

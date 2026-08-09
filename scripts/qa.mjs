@@ -58,6 +58,48 @@ const appeared = (text) => poll(() => visible(text));
 
 const submit = () => page.locator('button.btn-primary[type="submit"]').first().click();
 
+/* ================================================================= A0. auth */
+console.log("\n--- A0. Authentication ---");
+ok("login page is public", (await go("/login")) === 200);
+
+await page.goto(`${B}/sponsors`, { waitUntil: "networkidle" });
+ok("unauthenticated visit bounces to login", page.url().includes("/login"));
+
+// first-run setup: the seed leaves nobody with credentials
+ok("first-run setup offered", await has("Create the first login"));
+const jordanValue = await page
+  .locator('select[name="personId"] option', { hasText: "Jordan Avery" })
+  .getAttribute("value");
+await page.selectOption('select[name="personId"]', jordanValue);
+await page.fill('input[name="username"]', "jordan");
+await page.fill('input[name="password"]', "qa-password-123");
+await submit();
+await page.waitForURL(/\/people\?welcome=1$/);
+ok("first login created and signed in", await appeared("Jordan Avery"));
+
+// sign out, wrong password, right password
+await page.getByRole("button", { name: "Sign out" }).click();
+await page.waitForURL(/\/login$/);
+ok("sign out returns to login", true);
+await page.fill('input[name="username"]', "jordan");
+await page.fill('input[name="password"]', "wrong-password");
+await submit();
+ok("wrong password rejected", await appeared("don't match"));
+await page.fill('input[name="username"]', "jordan");
+await page.fill('input[name="password"]', "qa-password-123");
+await submit();
+await page.waitForURL(`${B}/`);
+ok("correct password signs in", await appeared("The Frame, today"));
+
+// a separate unauthenticated browser still can't get in
+{
+  const ctx2 = await browser.newContext();
+  const p2 = await ctx2.newPage();
+  await p2.goto(`${B}/operations`, { waitUntil: "networkidle" });
+  ok("second browser without cookie is walled out", p2.url().includes("/login"));
+  await ctx2.close();
+}
+
 /* ================================================================ A. routes */
 console.log("\n--- A. Route sweep ---");
 for (const p of ["/", "/operations", "/operations/new", "/operations/tasks", "/operations/tasks/new",

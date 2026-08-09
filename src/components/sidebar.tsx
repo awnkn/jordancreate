@@ -6,7 +6,13 @@ import { useState } from "react";
 import { NAV, isActive, isSectionActive } from "@/lib/nav";
 
 /** The navigation rail — ink-black, carrying the full brand lockup. */
-export function Sidebar() {
+export function Sidebar({
+  userName,
+  logout,
+}: {
+  userName: string;
+  logout: () => Promise<void>;
+}) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   // Every nav link closes the mobile drawer on the way out.
@@ -50,7 +56,7 @@ export function Sidebar() {
             <Wordmark />
           </div>
 
-          <nav className="px-3 pt-4 pb-8 lg:pt-0">
+          <nav className="px-3 pt-4 pb-4 lg:pt-0">
             {NAV.map((item) => {
               const sectionActive = isSectionActive(pathname, item);
               return (
@@ -102,6 +108,18 @@ export function Sidebar() {
               );
             })}
           </nav>
+
+          <div className="mt-2 border-t border-paper/10 px-5 py-4">
+            <p className="truncate text-[12.5px] text-paper/70">{userName}</p>
+            <form action={logout}>
+              <button
+                type="submit"
+                className="mt-1 text-[12px] text-paper/40 transition-colors hover:text-clay-bright"
+              >
+                Sign out
+              </button>
+            </form>
+          </div>
         </div>
       </aside>
     </>

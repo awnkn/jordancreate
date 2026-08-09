@@ -1,5 +1,7 @@
 "use server";
 
+import { hashPassword } from "@/lib/auth";
+
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { nullify, toDate } from "@/lib/format";
@@ -123,4 +125,53 @@ export async function createResponsibility(form: FormData) {
 export async function deleteResponsibility(id: string) {
   await db.responsibility.delete({ where: { id } });
   revalidateAll();
+}
+
+// ------------------------------------------------------------------- Logins
+
+/**
+ * Set or update a person's login. A blank password with an existing login
+ * keeps the current password and just updates the username.
+ */
+export async function setCredentials(personId: string, form: FormData) {
+  const username = nullify(form.get("username"))?.toLowerCase();
+  const password = typeof form.get("password") === "string" ? (form.get("password") as string) : "";
+  if (!username) redirect(`/people/${personId}?login=missing`);
+
+  const existing = await db.person.findUnique({
+    where: { id: personId },
+    select: { passwordHash: true },
+  });
+  if (!existing) redirect("/people");
+  if (!existing.passwordHash && password.length < 8) {
+    redirect(`/people/${personId}?login=short`);
+  }
+  if (password && password.length < 8) {
+    redirect(`/people/${personId}?login=short`);
+  }
+
+  try {
+    await db.person.update({
+      where: { id: personId },
+      data: {
+        username,
+        ...(password ? { passwordHash: hashPassword(password) } : {}),
+      },
+    });
+  } catch {
+    // Almost certainly the unique constraint on username.
+    redirect(`/people/${personId}?login=taken`);
+  }
+  revalidateAll();
+  redirect(`/people/${personId}?login=saved`);
+}
+
+/** Remove a person's login. Their session stops working on next page load. */
+export async function removeCredentials(personId: string) {
+  await db.person.update({
+    where: { id: personId },
+    data: { username: null, passwordHash: null },
+  });
+  revalidateAll();
+  redirect(`/people/${personId}`);
 }

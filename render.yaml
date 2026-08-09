@@ -18,3 +18,5 @@ services:
         sync: false # prompted for on Blueprint creation — paste the Supabase pooler URL
       - key: SETUP_TOKEN
         generateValue: true # enables the one-time /api/seed demo-data loader
+      - key: AUTH_SECRET
+        generateValue: true # signs login session cookies
