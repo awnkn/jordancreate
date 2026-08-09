@@ -13,7 +13,8 @@
     "db:studio": "prisma studio",
     "setup": "prisma migrate deploy && prisma generate && tsx prisma/seed.ts",
     "vercel-build": "prisma generate && prisma migrate deploy && next build",
-    "render-build": "prisma generate && prisma migrate deploy && next build"
+    "render-build": "prisma generate && prisma migrate deploy && next build",
+    "qa": "node scripts/qa.mjs"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.9.1",
